@@ -75,14 +75,20 @@
                                     </div>
                                     <?php
                                         include("php/config.php");
+                                        
                                         $winery_name = $_GET["winery_name"];
-                                        $sql = "SELECT `wine_name`, `year`, `classification` FROM `Wine` NATURAL JOIN `Produces` NATURAL JOIN `Winery` WHERE winery_name=\"$winery_name\"";
+                                        $sql = "SELECT * FROM `Wine` NATURAL JOIN `Produces` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
                                         $result = $db->query($sql);
 
                                         if ($result->num_rows > 0) {
                                             // output data of each row
                                             while($row = $result->fetch_assoc()) {
                                                 echo $row["wine_name"] . " (" . $row["year"] . ") " . $row["classification"] . "<br>";
+                                                
+                                                if ($row["email"]) {
+                                                    echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["comment"] . "<br>";
+                                                }
+                                                echo "<br>";
                                             }
                                         } else {
                                             echo "0 results";
@@ -110,7 +116,8 @@
                                         if ($result->num_rows > 0) {
                                             // output data of each row
                                             while($row = $result->fetch_assoc()) {
-                                                echo $row["event_name"] . " (" . $row["date"] . "): " . $row["description"] . "<br><br>";
+                                                echo $row["event_name"] . " (" . $row["date"] . "): " . $row["description"] . "<br>";
+                                                echo "(" . $row["start"] . " - " . $row[end] . ")" . "<br><br>";
                                             }
                                         } else {
                                             echo "0 results";
