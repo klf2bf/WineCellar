@@ -43,23 +43,30 @@
                     
                 </h3>
             </div>
-
+            
             <div class="panel-body panel-default">
-            	<form action="submit_wine_review.php" method="post" id="new_wine_review">
-                Wine: <select name="wine_id">
+            	<form action="submit_wine_review.php" method="post" id="submit_wine_review">
+                <?php
+                  $winery_name = $_GET["winery_name"];
+                  echo "<input type='hidden' id='winery_name' name='winery_name' value='" . $winery_name . "'>";
+                ?>
+                Wine: <select name="wine_id" id="wine_id">
                 <?php
 
                   include("php/config.php");
-                  $sql = "SELECT wine_name, wine_id, year, classification FROM Wine NATURAL JOIN Winery WHERE winery_name=\"Trump Winery\"";
+                  $winery_name = $_GET["winery_name"];
+                  $sql = "SELECT wine_name, wine_id, year, classification FROM Wine NATURAL JOIN Winery WHERE winery_name=\"$winery_name\"";
                   $result = $db->query($sql);
                   if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
-                      echo "<option value='" . $row["winery_id"] . "'>" . $row["wine_name"] . " (". $row["year"] . ", " . $row["classification"] . ")" . "</option>";
+                      echo "<option value=" . $row["wine_id"] . ">" . $row["wine_name"] . " (". $row["year"] . ", " . $row["classification"] . ")" . "</option>";
                     }
                   }
                   else {
                       echo "0 results";
                   }
+
+                  $db->close();
                 ?>
                 </select>
                 <br>
@@ -71,7 +78,6 @@
                 <a type="cancel" id="cancel" class="btn pull-right btn-default">Cancel</a>
 
             	</form>
-              <div id="message"> </div>
             </div>
         </div>
     </div>
