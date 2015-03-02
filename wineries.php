@@ -17,16 +17,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <script src="js/winery.js"></script>
-        <script type="text/javascript">
-            $(document).ready( function() {
-                $.ajax({
-                    url: 'php/wineries.php',
-                    success: function(data){
-                    $('#winery_list').append(data);   
-                    }
-                });
-            });
-        </script>
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -36,7 +26,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="wineries.html">Wine Cellar</a>
+                    <a class="navbar-brand" href="wineries.php">Wine Cellar</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -52,6 +42,22 @@
                     <h3 class="panel-title">Wineries</h3>
                 </div>
                 <div id="winery_list" class="panel-body">
+                    <?php 
+                        include("php/config.php");
+                        if (mysqli_connect_errno()) {
+                            printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
+                        }
+                        $stmt = $db->stmt_init();
+                        if($stmt->prepare("SELECT winery_name FROM Winery order by winery_name desc")) {
+                            $stmt->execute();
+                            $stmt->bind_result($winery_name);
+
+                            while($stmt->fetch()){
+                                echo "<a href='winery.php?winery_name=" . $winery_name . "'>" .$winery_name . "</a>";
+                            }
+                        }
+                        $db->close();
+                    ?>
                 </div>
             </div>
         </div>
