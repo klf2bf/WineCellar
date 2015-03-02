@@ -78,6 +78,7 @@
                                         include("php/config.php");
                                         
                                         $winery_name = $_GET["winery_name"];
+                                        echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
                                         $sql = "SELECT * FROM `Wine` NATURAL JOIN `Produces` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
                                         $result = $db->query($sql);
 
@@ -135,13 +136,13 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <a href="add_winery_review.php" class="btn pull-right btn-primary">Add Winery Review</a>
+                                        <a id="add_winery_review" class="btn pull-right btn-primary">Add Winery Review</a>
                                         <h3 class="panel-title">Reviews</h3>
                                     </div>
                                     <?php
                                         include("php/config.php");
                                         $winery_name = $_GET["winery_name"];
-                                        $sql = "SELECT * FROM Reviews WHERE winery_name=\"$winery_name\"";
+                                        $sql = "SELECT * FROM Reviews WHERE winery_name=\"$winery_name\" ORDER BY timestamp DESC";
                                         $result = $db->query($sql);
 
                                         if ($result->num_rows > 0) {

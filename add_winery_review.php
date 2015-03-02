@@ -1,7 +1,7 @@
 <html>
   <head>
   	<meta charset="utf-8">
-  	<title>Fixed Top Navbar Example for Bootstrap</title>
+  	<title>Winery Review</title>
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -39,12 +39,26 @@
     <div class="container main-container">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">
-                    Review
+                <h3 class="panel-title" id="review_title">
+                    
                 </h3>
             </div>
 
             <div class="panel-body panel-default">
+            	<form action="submit_winery_review.php" method="post" id="new_winery_review">
+            		Email: <input type="email" name="email" id="email" required placeholder="test@example.com" maxlength="50"><br>
+            		Description: <input type="text" cols="40" rows="5" style="width:200px; height:50px;" id="description" name="description" required maxlength="350" placeholder=""><br>
+            		Rating: <input type="number" name="rating" id="rating" min="1" max="10" required><br>
+                <?php
+                  $winery_name = $_GET["winery_name"];
+                  echo "<input type='hidden' id='winery_name' name='winery_name' value='" . $winery_name . "'>";
+                ?>
+
+            		<a type="submit" id="submit" class="btn pull-right btn-primary">Submit</a>
+                <a type="cancel" id="cancel" class="btn pull-right btn-default">Cancel</a>
+
+            	</form>
+              <div id="message"> </div>
             </div>
         </div>
     </div>
