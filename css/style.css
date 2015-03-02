@@ -1,3 +1,84 @@
 .main-container {
   margin-top: 70px;
 }
+
+.panel-label {
+  width: 50%;
+  height: 5px;
+}
+
+ul li {
+  list-style-type: none;
+}
+
+.panel-heading {
+  min-height: 50px;
+}
+
+.inline {
+  display: inline-block;
+}
+.main-container {
+  margin-top: 70px;
+}
+
+.cell-nowrap {
+	white-space: nowrap;
+}
+
+.urgent-highlight {
+  background-color: #D5DCB4 !important;
+}
+
+.border-container {
+  padding: 0 10px;
+}
+.urgency {
+  padding-left: 0;
+  margin-bottom: -8px;
+}
+.report-border {
+  margin-top: 4px;
+  border-top: solid 1px #D3D3D3;
+  padding-bottom: 3px;
+}
+.list-group > li:first-child {
+  border-top: none;
+}
+
+.table-paging-container {
+  text-align: center;
+  margin-top: -20px;
+  margin-bottom: -20px;
+}
+
+.table {
+  margin-bottom: 0 !important;
+}
+.editable-empty, .editable-empty:hover, .editable-empty:focus {
+  color: #8ea9c7;
+}
+
+.visible-xs2 {
+display: none !important;
+}
+@media (max-width: 767px) {
+.visible-xs2 {
+display: table !important;
+}
+tr.visible-xs2 {
+display: table-row !important;
+}
+th.visible-xs2,
+td.visible-xs2 {
+display: table-cell !important;
+}
+}
+
+#add_farm {
+  margin-right: 3px;
+}
+
+.glyphicon-calendar:before {
+  content: "\d83d\dcc5";
+}
