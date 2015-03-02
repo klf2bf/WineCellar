@@ -72,6 +72,7 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
+                                        <a id="add_wine_review" class="btn pull-right btn-primary">Add Wine Review</a>
                                         <h3 class="panel-title">Wines</h3>
                                     </div>
                                     <?php

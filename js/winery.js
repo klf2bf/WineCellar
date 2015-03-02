@@ -13,6 +13,10 @@ $(document).ready(function () {
 
 	});
 
+	$("#add_wine_review").click(function(){
+		var winery_name = $("#winery_name").val();
+		window.location = "../add_wine_review.php?winery_name=" + winery_name;
+	})
 	$("#submit").click(function(event) {
 		var wineryname = $("#winery_name").val();
 		var email = $("#email").val();
@@ -23,6 +27,26 @@ $(document).ready(function () {
 			type: "POST",
 			url: 'submit_winery_review.php',
 			data: {'winery_name': winery_name, 'email': email, 'description': description, 'rating': rating},
+			success: function (data) {
+				//$('#new_winery_review')[0].reset();
+				//$("#message").text(data);	
+				window.location = "../winery.php?winery_name=" + wineryname;
+
+			}
+		});
+		return false;
+	});
+
+	$("#submitWineReview").click(function(event) {
+		var winery_id= $("#winery_id").val();
+		var email = $("#email").val();
+		var comment = $("#comment").val();
+		var stars = $("#stars").val();
+				
+		$.ajax({
+			type: "POST",
+			url: 'submit_wine_review.php',
+			data: {'winery_id': winery_id, 'email': email, 'comment': comment, 'stars': stars},
 			success: function (data) {
 				//$('#new_winery_review')[0].reset();
 				//$("#message").text(data);	
