@@ -44,6 +44,7 @@
                     <?php
                         include("php/config.php");
                         echo $_GET["winery_name"]
+                        //$db->close();
                     ?>
                 </h3>
             </div>
@@ -134,6 +135,7 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
+                                        <a href="add_winery_review.php" class="btn pull-right btn-primary">Add Winery Review</a>
                                         <h3 class="panel-title">Reviews</h3>
                                     </div>
                                     <?php
