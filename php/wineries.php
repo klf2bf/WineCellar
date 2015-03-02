@@ -14,7 +14,7 @@
 
     #while($row = mysqli_fetch_array($result)) {
     while($stmt->fetch()){
-      echo $winery_name ;
+      echo "<a href='winery.html?winery_name=" . $winery_name . "'>" .$winery_name . "</a>";
       
     }
   }
