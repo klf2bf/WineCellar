@@ -39,8 +39,8 @@
     <div class="container main-container">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title" id="review_title">
-                    
+                <h3 class="panel-title">
+                    Wine Review
                 </h3>
             </div>
             

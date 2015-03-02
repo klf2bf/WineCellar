@@ -50,7 +50,7 @@
             </div>
 
             <div class="panel-body panel-default">
-                <div class="hidden-xs">
+                <div>
                     <ul class="nav nav-pills nav-stacked pull-left" id="myTabList"role="tablist">
                         <li id="wine-tab-li" class="active">
                             <a href="#wineTab" id="wine-tab" role="tab" data-toggle="pill">Wines</a>
