@@ -28,6 +28,22 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+            <?php 
+                include("php/config.php");
+                if (mysqli_connect_errno()) {
+                    printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
+                }
+                $stmt = $db->stmt_init();
+                if($stmt->prepare("SELECT winery_name FROM Manages order by winery_name asc")) {
+                    $stmt->execute();
+                    $stmt->bind_result($winery_name);
+
+                    while($stmt->fetch()){
+                        echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                    }
+                }
+                $db->close();
+            ?>
             <li><a href="account.html">Account</a></li>
             <li><a href="login.html">Log In</a></li>
           </ul>
@@ -75,31 +91,33 @@
                                         <a id="add_wine_review" class="btn pull-right btn-primary">Add Wine Review</a>
                                         <h3 class="panel-title">Wines</h3>
                                     </div>
-                                    <?php
-                                        include("php/config.php");
-                                        
-                                        $winery_name = $_GET["winery_name"];
-                                        echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
-                                        $sql = "SELECT * FROM `Wine` NATURAL JOIN `Produces` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
-                                        $result = $db->query($sql);
+                                    <div class="panel-body">
+                                        <?php
+                                            include("php/config.php");
+                                            
+                                            $winery_name = $_GET["winery_name"];
+                                            echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
+                                            $sql = "SELECT * FROM `Wine` NATURAL JOIN `Produces` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
+                                            $result = $db->query($sql);
 
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            while($row = $result->fetch_assoc()) {
-                                                echo $row["wine_name"] . " (" . $row["year"] . ") " . $row["classification"] . "<br>";
-                                                
-                                                if ($row["email"]) {
-                                                    echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["comment"] . "<br>";
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo $row["wine_name"] . " (" . $row["year"] . ") " . $row["classification"] . "<br>";
+                                                    
+                                                    if ($row["email"]) {
+                                                        echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["comment"] . "<br>";
+                                                    }
+                                                    echo "<br>";
                                                 }
-                                                echo "<br>";
+                                            } else {
+                                                echo "0 results";
                                             }
-                                        } else {
-                                            echo "0 results";
-                                        }
-                                        
-                                        $db->close();
+                                            
+                                            $db->close();
 
-                                    ?>
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -110,25 +128,27 @@
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Events</h3>
                                     </div>
-                                    <?php
-                                        include("php/config.php");
-                                        $winery_name = $_GET["winery_name"];
-                                        $sql = "SELECT * FROM Event NATURAL JOIN Hosts WHERE winery_name=\"$winery_name\"";
-                                        $result = $db->query($sql);
+                                    <div class="panel-body">
+                                        <?php
+                                            include("php/config.php");
+                                            $winery_name = $_GET["winery_name"];
+                                            $sql = "SELECT * FROM Event NATURAL JOIN Hosts WHERE winery_name=\"$winery_name\"";
+                                            $result = $db->query($sql);
 
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            while($row = $result->fetch_assoc()) {
-                                                echo $row["event_name"] . " (" . $row["date"] . "): " . $row["description"] . "<br>";
-                                                echo "(" . $row["start"] . " - " . $row[end] . ")" . "<br><br>";
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo $row["event_name"] . " (" . $row["date"] . "): " . $row["description"] . "<br>";
+                                                    echo "(" . $row["start"] . " - " . $row[end] . ")" . "<br><br>";
+                                                }
+                                            } else {
+                                                echo "0 results";
                                             }
-                                        } else {
-                                            echo "0 results";
-                                        }
-                                        
-                                        $db->close();
+                                            
+                                            $db->close();
 
-                                    ?>
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -140,24 +160,26 @@
                                         <a id="add_winery_review" class="btn pull-right btn-primary">Add Winery Review</a>
                                         <h3 class="panel-title">Reviews</h3>
                                     </div>
-                                    <?php
-                                        include("php/config.php");
-                                        $winery_name = $_GET["winery_name"];
-                                        $sql = "SELECT * FROM Reviews WHERE winery_name=\"$winery_name\" ORDER BY timestamp DESC";
-                                        $result = $db->query($sql);
+                                    <div class="panel-body">
+                                        <?php
+                                            include("php/config.php");
+                                            $winery_name = $_GET["winery_name"];
+                                            $sql = "SELECT * FROM Reviews WHERE winery_name=\"$winery_name\" ORDER BY timestamp DESC";
+                                            $result = $db->query($sql);
 
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            while($row = $result->fetch_assoc()) {
-                                                echo $row["email"] . " says: (" . $row["rating"] . ") " . $row["description"] . "<br><br>";
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo $row["email"] . " says: (" . $row["rating"] . ") " . $row["description"] . "<br><br>";
+                                                }
+                                            } else {
+                                                echo "0 results";
                                             }
-                                        } else {
-                                            echo "0 results";
-                                        }
-                                        
-                                        $db->close();
+                                            
+                                            $db->close();
 
-                                    ?>
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -168,33 +190,35 @@
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Information</h3>
                                     </div>
-                                    <?php
-                                        include("php/config.php");
-                                        $winery_name = $_GET["winery_name"];
-                                        $sql = "SELECT * FROM Winery NATURAL JOIN Winery_Hours WHERE winery_name=\"$winery_name\"";
-                                        $result = $db->query($sql);
+                                    <div class="panel-body">
+                                        <?php
+                                            include("php/config.php");
+                                            $winery_name = $_GET["winery_name"];
+                                            $sql = "SELECT * FROM Winery NATURAL JOIN Winery_Hours WHERE winery_name=\"$winery_name\"";
+                                            $result = $db->query($sql);
 
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            $count = -1;
-                                            while($row = $result->fetch_assoc()) {
-                                                if ($count < 0) {
-                                                    echo "Website: " . $row["website"] . "<br>";
-                                                    echo "Owner: " . $row["owner"] . "<br>";
-                                                    echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
-                                                    echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
-                                                    $count = 1;
-                                                } else {
-                                                    echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                $count = -1;
+                                                while($row = $result->fetch_assoc()) {
+                                                    if ($count < 0) {
+                                                        echo "Website: " . $row["website"] . "<br>";
+                                                        echo "Owner: " . $row["owner"] . "<br>";
+                                                        echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
+                                                        echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
+                                                        $count = 1;
+                                                    } else {
+                                                        echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
+                                                    }
                                                 }
+                                            } else {
+                                                echo "0 results";
                                             }
-                                        } else {
-                                            echo "0 results";
-                                        }
-                                        
-                                        $db->close();
+                                            
+                                            $db->close();
 
-                                    ?>
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>

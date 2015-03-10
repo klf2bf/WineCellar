@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Fixed Top Navbar Example for Bootstrap</title>
+        <title>Wine Cellar</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
@@ -30,6 +30,22 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
+                        <?php 
+                            include("php/config.php");
+                            if (mysqli_connect_errno()) {
+                                printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
+                            }
+                            $stmt = $db->stmt_init();
+                            if($stmt->prepare("SELECT winery_name FROM Manages order by winery_name asc")) {
+                                $stmt->execute();
+                                $stmt->bind_result($winery_name);
+
+                                while($stmt->fetch()){
+                                    echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                                }
+                            }
+                            $db->close();
+                        ?>
                         <li><a href="account.html">Account</a></li>
                         <li><a href="login.html">Log In</a></li>
                     </ul>
