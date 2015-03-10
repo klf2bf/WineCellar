@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 
 	if ($("#review_title").length > 0) {
@@ -59,4 +58,33 @@ $(document).ready(function () {
 		var wineryname = $("#winery_name").val();
 		window.location = "../winery.php?winery_name=" + wineryname;
 	})
+
+	$('.nav-pills').stickyTabs();
+
 });
+
+(function ( $ ) {
+    $.fn.stickyTabs = function() {
+        context = this
+
+        // Show the tab corresponding with the hash in the URL, or the first tab.
+        var showTabFromHash = function() {
+          var hash = window.location.hash;
+          var selector = hash ? 'a[href="' + hash + '"]' : 'li:first-child a';
+          $(selector, context).tab('show');
+        }
+
+        // Set the correct tab when the page loads
+        showTabFromHash(context)
+
+        // Set the correct tab when a user uses their back/forward button
+        window.addEventListener('hashchange', showTabFromHash, false);
+
+        // Change the URL when tabs are clicked
+        $('a', context).on('click', function(e) {
+          history.pushState(null, null, this.href);
+        });
+
+        return this;
+    };
+}( jQuery ));
