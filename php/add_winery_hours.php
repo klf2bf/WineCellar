@@ -8,7 +8,7 @@
     $sql = "INSERT INTO Winery_Hours (winery_name, day_of_week, open, close) VALUES ('$winery', '$day', '$open', '$close')";
     if($stmt->prepare($sql)) {
         $stmt->execute();
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        header('Location: ' . $_SERVER['HTTP_REFERER'] . '#informationTab');
         exit;
     } else {
         echo("error: " . htmlspecialchars($stmt->error));
