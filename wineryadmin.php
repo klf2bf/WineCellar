@@ -51,7 +51,7 @@
   </nav>
   
 
-  <script type="text/javascript" src="js/winery.js"></script>
+    <script type="text/javascript" src="js/winery.js"></script>
     <div class="container main-container">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -205,32 +205,31 @@
                                                         echo "Website: " . $row["website"] . "<br>";
                                                         echo "Owner: " . $row["owner"] . "<br>";
                                                         echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
-                                                        echo "<form action='php/update_winery_hours.php' method='post'>";
+                                                        echo "<form action='php/update_winery_hours.php' class='form-inline' method='post'>";
                                                         echo "<input type='hidden' name='winery' value='$winery_name'>";
                                                         echo "<input type='hidden' name='day' value='" . $row["day_of_week"] . "'>";
-                                                        echo $row["day_of_week"] . ": " . "<input type='time' name='open' value='" . $row["open"] . "'> to <input type='time' name='close' value='" . $row["close"] . "'>";
-                                                        echo " <button type='submit' class='btn btn-default btn-sm'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
-                                                        echo " <button type='submit' class='btn btn-default btn-sm' formaction='php/delete_winery_hours.php'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>";
+                                                        echo $row["day_of_week"] . ": " . "<input type='time' class='form-control' name='open' value='" . $row["open"] . "'> to <input type='time' class='form-control' name='close' value='" . $row["close"] . "'>";
+                                                        echo " <button type='submit' class='btn btn-default'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
+                                                        echo " <button type='submit' class='btn btn-default' formaction='php/delete_winery_hours.php'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>";
                                                         echo "</form>";
-                                                        echo "<br>";
                                                         $count = 1;
                                                     } else {
-                                                        echo "<form action='php/update_winery_hours.php' method='post'>";
+                                                        echo "<form action='php/update_winery_hours.php' class='form-inline' method='post'>";
                                                         echo "<input type='hidden' name='winery' value='$winery_name'>";
                                                         echo "<input type='hidden' name='day' value='" . $row["day_of_week"] . "'>";
-                                                        echo $row["day_of_week"] . ": " . "<input type='time' name='open' value='" . $row["open"] . "'> to <input type='time' name='close' value='" . $row["close"] . "'>";
-                                                        echo " <button type='submit' class='btn btn-default btn-sm'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
-                                                        echo " <button type='submit' class='btn btn-default btn-sm' formaction='php/delete_winery_hours.php'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>";
+                                                        echo $row["day_of_week"] . ": " . "<input type='time' class='form-control' name='open' value='" . $row["open"] . "'> to <input type='time' class='form-control' name='close' value='" . $row["close"] . "'>";
+                                                        echo " <button type='submit' class='btn btn-default'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
+                                                        echo " <button type='submit' class='btn btn-default' formaction='php/delete_winery_hours.php'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>";
                                                         echo "</form>";
-                                                        echo "<br>";
                                                     }
                                                 }
+                                                echo "<br>";
                                             } else {
                                                 echo "0 results";
                                             }
                                             $db->close();
                                         ?>
-                                        <label>Add Hours</label>
+                                        <label>Add Hours:</label>
                                         <form class='form-inline' action='php/add_winery_hours.php' method='post'>
                                             <input type='hidden' name='winery' value='<?php
                                                 //include("php/config.php");
@@ -248,6 +247,15 @@
                                                     <option value='Saturday'>Saturday</option>
                                                 </select>
                                             </div>
+                                            <div class='form-group'>
+                                                Open:
+                                                <input class='form-control' required type='time' name='open'>
+                                            </div>
+                                            <div class='form-group'>
+                                                Close:
+                                                <input class='form-control' required type='time' name='close'>
+                                            </div>
+                                            <button type='submit' class='btn btn-default'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button>
                                         </form>
                                     </div>
                                 </div>
