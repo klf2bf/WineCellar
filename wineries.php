@@ -48,12 +48,12 @@
                             printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
                         }
                         $stmt = $db->stmt_init();
-                        if($stmt->prepare("SELECT winery_name FROM Winery order by winery_name desc")) {
+                        if($stmt->prepare("SELECT winery_name FROM Winery order by winery_name asc")) {
                             $stmt->execute();
                             $stmt->bind_result($winery_name);
 
                             while($stmt->fetch()){
-                                echo "<a href='winery.php?winery_name=" . $winery_name . "'>" .$winery_name . "</a>";
+                                echo "<a href='winery.php?winery_name=" . $winery_name . "'>" .$winery_name . "</a><br>";
                             }
                         }
                         $db->close();
