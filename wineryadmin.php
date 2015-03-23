@@ -87,7 +87,10 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <a id="add_wine_review" class="btn pull-right btn-primary">Add Wine Review</a>
+                                        <?php
+                                            $winery=$_GET["winery_name"];
+                                            echo "<a href='add_wine.php?winery_name=$winery' class='btn pull-right btn-primary'>Add Wine</a>"
+                                        ?>
                                         <h3 class="panel-title">Wines</h3>
                                     </div>
                                     <div class="panel-body">
@@ -125,7 +128,10 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <a id="add_event" class="btn pull-right btn-primary">Add Event</a>
+                                        <?php
+                                            $winery=$_GET["winery_name"];
+                                            echo "<a href='add_event.php?winery_name=$winery' class='btn pull-right btn-primary'>Add Event</a>"
+                                        ?>
                                         <h3 class="panel-title">Events</h3>
                                     </div>
                                     <div class="panel-body">
