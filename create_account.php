@@ -8,18 +8,19 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     if ($password == $confirm_password) {
+        $email = $_POST['email'];
         $first_name = $_POST['first_name'];
         $last_name = $_POST['last_name'];
         $dob = $_POST['dob'];
 
-        $password_hash = hash("sha256", $password);
-        $query = "INSERT INTO User (email,first_name,last_name,password,dob) Values('$email','$password_hash','$first_name','$last_name','$dob')";
+        $password_hash = hash('sha256',$password);
+        $query = "INSERT INTO User (email,first_name,last_name,password,dob) Values('$email','$first_name','$last_name','$password_hash','$dob')";
 
         if ($db->query($query) === TRUE) {
             $_SESSION['current_user'] = $email;
             header("Location: index.html");
         } else {
-            echo "Error: " . $query . "<br>" . $db->error;
+            $account_error = $db->error;
         }
     }
     else {
@@ -75,7 +76,7 @@ else
     <form action="" method="POST">
         Email:<input type="text" name="email"><br/>
         Password:<input type="password" name="password"><br/>
-        Confirm Password:<input type="text " name="confirm_password"><br/>
+        Confirm Password:<input type="password" name="confirm_password"><br/>
         First Name:<input type="text" name="first_name"><br/>
         Last Name:<input type="text" name="last_name"><br/>
         Date of Birth:<input type="date" name="dob"><br/>
