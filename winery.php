@@ -1,5 +1,5 @@
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Winery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,56 +11,63 @@
     rel="stylesheet">
     <link href="css/style.css"rel="stylesheet">
     <link href="css/base_subpanels.css" rel="stylesheet">
-  </head>
-  <body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="wineries.php">Wine Cellar</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <?php 
-                include("php/config.php");
-                if (mysqli_connect_errno()) {
-                    printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
-                }
-                $stmt = $db->stmt_init();
-                if($stmt->prepare("SELECT winery_name FROM Manages order by winery_name asc")) {
-                    $stmt->execute();
-                    $stmt->bind_result($winery_name);
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="wineries.php">Wine Cellar</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <?php 
+                    include("php/config.php");
 
-                    while($stmt->fetch()){
-                        echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                    if (mysqli_connect_errno()) {
+                        printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
                     }
-                }
-                $db->close();
-            ?>
-            <li><a href="account.html">Account</a></li>
-            <li><a href="login.html">Log In</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-  </nav>
-  
+                    $email = $_SESSION['email'];
+                    if($_SESSION['loggedin']){
+                        $stmt = $db->stmt_init();
+                        if($stmt->prepare("SELECT winery_name FROM Winery WHERE owner_email='$email'")) {
+                            $stmt->execute();
+                            $stmt->bind_result($winery_name);
 
-  <script type="text/javascript" src="js/winery.js"></script>
+                            while($stmt->fetch()){
+                                echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                            }
+                        }
+                        $db->close();
+                        echo "<li><a href='account.php'>" . $_SESSION['first_name'] . " " . $_SESSION['last_name'] . "'s Account</a></li>";
+                        echo "<li><a href='php/logout.php'>Log Out</a></li>";
+                    }
+                    else {
+                        echo "<li><a href='create_account.php'>Create Account</a></li>";
+                        echo "<li><a href='login.php'>Log In</a></li>";
+                    }
+                    ?>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+
+    <script type="text/javascript" src="js/winery.js"></script>
     <div class="container main-container">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">
                     <?php
-                        include("php/config.php");
-                        echo $_GET["winery_name"]
-                        //$db->close();
+                    include("php/config.php");
+                    echo $_GET["winery_name"]
                     ?>
                 </h3>
             </div>
@@ -93,35 +100,35 @@
                                     </div>
                                     <div class="panel-body">
                                         <?php
-                                            include("php/config.php");
-                                            
-                                            $winery_name = $_GET["winery_name"];
-                                            echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
-                                            $sql = "SELECT * FROM `Wine` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
-                                            $result = $db->query($sql);
+                                        include("php/config.php");
 
-                                            if ($result->num_rows > 0) {
-                                                // output data of each row
-                                                while($row = $result->fetch_assoc()) {
-                                                    echo $row["wine_name"] . " (" . $row["year"] . ") " . $row["classification"] . "<br>";
-                                                    
-                                                    if ($row["email"]) {
-                                                        echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["comment"] . "<br>";
-                                                    }
-                                                    echo "<br>";
+                                        $winery_name = $_GET["winery_name"];
+                                        echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
+                                        $sql = "SELECT * FROM `Wine` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
+                                        $result = $db->query($sql);
+
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) {
+                                                echo $row["wine_name"] . " (" . $row["year"] . ") " . $row["classification"] . "<br>";
+
+                                                if ($row["email"]) {
+                                                    echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["comment"] . "<br>";
                                                 }
-                                            } else {
-                                                echo "0 results";
+                                                echo "<br>";
                                             }
-                                            
-                                            $db->close();
+                                        } else {
+                                            echo "0 results";
+                                        }
+
+                                        $db->close();
 
                                         ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-              
+
                         <div class="tab-pane" id="eventTab">
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
@@ -130,29 +137,29 @@
                                     </div>
                                     <div class="panel-body">
                                         <?php
-                                            include("php/config.php");
-                                            $winery_name = $_GET["winery_name"];
-                                            $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\"";
-                                            $result = $db->query($sql);
+                                        include("php/config.php");
+                                        $winery_name = $_GET["winery_name"];
+                                        $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\"";
+                                        $result = $db->query($sql);
 
-                                            if ($result->num_rows > 0) {
-                                                // output data of each row
-                                                while($row = $result->fetch_assoc()) {
-                                                    echo $row["event_name"] . " (" . $row["date"] . "): " . $row["description"] . "<br>";
-                                                    echo "(" . $row["start"] . " - " . $row[end] . ")" . "<br><br>";
-                                                }
-                                            } else {
-                                                echo "0 results";
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) {
+                                                echo $row["event_name"] . " (" . $row["date"] . "): " . $row["description"] . "<br>";
+                                                echo "(" . $row["start"] . " - " . $row[end] . ")" . "<br><br>";
                                             }
-                                            
-                                            $db->close();
+                                        } else {
+                                            echo "0 results";
+                                        }
+
+                                        $db->close();
 
                                         ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-              
+
                         <div class="tab-pane" id="reviewTab">
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
@@ -162,28 +169,28 @@
                                     </div>
                                     <div class="panel-body">
                                         <?php
-                                            include("php/config.php");
-                                            $winery_name = $_GET["winery_name"];
-                                            $sql = "SELECT * FROM Reviews WHERE winery_name=\"$winery_name\" ORDER BY timestamp DESC";
-                                            $result = $db->query($sql);
+                                        include("php/config.php");
+                                        $winery_name = $_GET["winery_name"];
+                                        $sql = "SELECT * FROM Reviews WHERE winery_name=\"$winery_name\" ORDER BY timestamp DESC";
+                                        $result = $db->query($sql);
 
-                                            if ($result->num_rows > 0) {
-                                                // output data of each row
-                                                while($row = $result->fetch_assoc()) {
-                                                    echo $row["email"] . " says: (" . $row["rating"] . ") " . $row["description"] . "<br><br>";
-                                                }
-                                            } else {
-                                                echo "0 results";
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) {
+                                                echo $row["email"] . " says: (" . $row["rating"] . ") " . $row["description"] . "<br><br>";
                                             }
-                                            
-                                            $db->close();
+                                        } else {
+                                            echo "0 results";
+                                        }
+
+                                        $db->close();
 
                                         ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="tab-pane" id="informationTab">
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
@@ -192,30 +199,30 @@
                                     </div>
                                     <div class="panel-body">
                                         <?php
-                                            include("php/config.php");
-                                            $winery_name = $_GET["winery_name"];
-                                            $sql = "SELECT * FROM Winery NATURAL JOIN Winery_Hours WHERE winery_name=\"$winery_name\"";
-                                            $result = $db->query($sql);
+                                        include("php/config.php");
+                                        $winery_name = $_GET["winery_name"];
+                                        $sql = "SELECT * FROM Winery NATURAL JOIN Winery_Hours WHERE winery_name=\"$winery_name\"";
+                                        $result = $db->query($sql);
 
-                                            if ($result->num_rows > 0) {
-                                                // output data of each row
-                                                $count = -1;
-                                                while($row = $result->fetch_assoc()) {
-                                                    if ($count < 0) {
-                                                        echo "Website: " . $row["website"] . "<br>";
-                                                        echo "Owner: " . $row["owner"] . "<br>";
-                                                        echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
-                                                        echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
-                                                        $count = 1;
-                                                    } else {
-                                                        echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
-                                                    }
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            $count = -1;
+                                            while($row = $result->fetch_assoc()) {
+                                                if ($count < 0) {
+                                                    echo "Website: " . $row["website"] . "<br>";
+                                                    echo "Owner: " . $row["owner"] . "<br>";
+                                                    echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
+                                                    echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
+                                                    $count = 1;
+                                                } else {
+                                                    echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
                                                 }
-                                            } else {
-                                                echo "0 results";
                                             }
-                                            
-                                            $db->close();
+                                        } else {
+                                            echo "0 results";
+                                        }
+
+                                        $db->close();
 
                                         ?>
                                     </div>
@@ -229,5 +236,5 @@
         </div>
     </div>
 
-  </body>
+</body>
 </html>
