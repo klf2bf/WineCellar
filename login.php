@@ -78,19 +78,24 @@ function debug_to_console( $data ) {
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="account.html">Account</a></li>
-            <li><a href="login.php">Log In</a></li>
+            <li><a href="create_account.php">Create Account</a></li>
+            <li class="active"><a href="login.php">Log In</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
   <div class="container main-container">
 <form action="" method="POST">
-Email: <input type="text" name="email"><br/>
-Password: <input type="password" name="password"><br/>
-<input type="Submit" value="Login"> 
+  <div class='form-group'>
+    <label for='email'>Email</label>
+    <input type='email' class='form-control' name='email'>
+  </div>
+  <div class='form-group'>
+    <label for='email'>Password</label>
+    <input type='password' class='form-control' name='password'>
+  </div>
+  <input class='btn btn-default' type="Submit" value="Login"> 
 </form>
-<button onClick="parent.location='create_account.php'">Create Account</button><br/>
 <?php echo "<br/>"; echo $login_error; ?>
 </form>
 </div>

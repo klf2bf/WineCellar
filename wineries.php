@@ -49,7 +49,7 @@
                                 }
                                 $db->close();
                                 echo "<li><a href='account.php'>" . $_SESSION['first_name'] . " " . $_SESSION['last_name'] . "'s Account</a></li>";
-                                echo "<li><a href='logout.php'>Log Out</a></li>";
+                                echo "<li><a href='php/logout.php'>Log Out</a></li>";
                             }
                             else {
                                 echo "<li><a href='login.php'>Log In</a></li>";

@@ -61,10 +61,11 @@ else
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
+        <a class="navbar-brand" href="wineries.php">Wine Cellar</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="account.html">Account</a></li>
+        <li class="active"><a href="create_account.php">Create Account</a></li>
         <li><a href="login.php">Log In</a></li>
     </ul>
 </div><!--/.nav-collapse -->
