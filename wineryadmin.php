@@ -29,22 +29,29 @@
           <ul class="nav navbar-nav navbar-right">
             <?php 
                 include("php/config.php");
+                
                 if (mysqli_connect_errno()) {
                     printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
                 }
-                $stmt = $db->stmt_init();
-                if($stmt->prepare("SELECT winery_name FROM Manages order by winery_name asc")) {
-                    $stmt->execute();
-                    $stmt->bind_result($winery_name);
+                $email = $_SESSION['email'];
+                if($_SESSION['loggedin']){
+                    $stmt = $db->stmt_init();
+                    if($stmt->prepare("SELECT winery_name FROM Winery WHERE owner_email='$email'")) {
+                        $stmt->execute();
+                        $stmt->bind_result($winery_name);
 
-                    while($stmt->fetch()){
-                        echo "<li class='active'><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                        while($stmt->fetch()){
+                            echo "<li class='active'><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                        }
                     }
+                    $db->close();
+                    echo "<li><a href='account.php'>" . $_SESSION['first_name'] . " " . $_SESSION['last_name'] . "'s Account</a></li>";
+                    echo "<li><a href='logout.php'>Log Out</a></li>";
                 }
-                $db->close();
+                else {
+                    echo "<li><a href='login.php'>Log In</a></li>";
+                }
             ?>
-            <li><a href="account.html">Account</a></li>
-            <li><a href="login.html">Log In</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -60,7 +67,7 @@
                         include("php/config.php");
                         echo $_GET["winery_name"]
                         //$db->close();
-                    ?>
+                    ?> Admin
                 </h3>
             </div>
 
@@ -99,7 +106,7 @@
                                             
                                             $winery_name = $_GET["winery_name"];
                                             echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
-                                            $sql = "SELECT * FROM `Wine` NATURAL JOIN `Produces` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
+                                            $sql = "SELECT * FROM `Wine` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
                                             $result = $db->query($sql);
 
                                             if ($result->num_rows > 0) {
@@ -138,7 +145,7 @@
                                         <?php
                                             include("php/config.php");
                                             $winery_name = $_GET["winery_name"];
-                                            $sql = "SELECT * FROM Event NATURAL JOIN Hosts WHERE winery_name=\"$winery_name\"";
+                                            $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\"";
                                             $result = $db->query($sql);
 
                                             if ($result->num_rows > 0) {

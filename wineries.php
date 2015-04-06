@@ -36,19 +36,25 @@
                             if (mysqli_connect_errno()) {
                                 printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
                             }
-                            $stmt = $db->stmt_init();
-                            if($stmt->prepare("SELECT winery_name FROM Manages order by winery_name asc")) {
-                                $stmt->execute();
-                                $stmt->bind_result($winery_name);
+                            $email = $_SESSION['email'];
+                            if($_SESSION['loggedin']){
+                                $stmt = $db->stmt_init();
+                                if($stmt->prepare("SELECT winery_name FROM Winery WHERE owner_email='$email'")) {
+                                    $stmt->execute();
+                                    $stmt->bind_result($winery_name);
 
-                                while($stmt->fetch()){
-                                    echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                                    while($stmt->fetch()){
+                                        echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                                    }
                                 }
+                                $db->close();
+                                echo "<li><a href='account.php'>" . $_SESSION['first_name'] . " " . $_SESSION['last_name'] . "'s Account</a></li>";
+                                echo "<li><a href='logout.php'>Log Out</a></li>";
                             }
-                            $db->close();
-                            echo "<li><a href='account.html'>" . $_SESSION['email'] . "'s Account</a></li>";
+                            else {
+                                echo "<li><a href='login.php'>Log In</a></li>";
+                            }
                         ?>
-                        <li><a href="login.php">Log In</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>

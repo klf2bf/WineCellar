@@ -16,12 +16,34 @@ if (isset($_POST['email']) && isset($_POST['password']))
   $_SESSION['email'] = $email;
   if ($hash == $row['password']) {
     $login_error = "";
+    
+    #Get user information
+    $stmt = $db->stmt_init();
+    if($stmt->prepare("SELECT first_name, last_name, is_superuser FROM User WHERE email = '$email'")) {
+      $stmt->execute();
+      $stmt->bind_result($first_name, $last_name, $is_superuser);
+      $row = $stmt->fetch();
+      $_SESSION['first_name'] = $first_name;
+      $_SESSION['last_name'] = $last_name;
+      $_SESSION['is_superuser'] = $is_superuser;
+    }
+    $_SESSION['loggedin'] = true;
     header("Location: wineries.php");
   }
   else
   {
     $login_error = "Invalid email or password.";
+    $_SESSION['loggedin'] = false;
   }
+}
+function debug_to_console( $data ) {
+
+    if ( is_array( $data ) )
+        $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
+    else
+        $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
+
+    echo $output;
 }
 ?>
 
