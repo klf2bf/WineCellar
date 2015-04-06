@@ -1,28 +1,49 @@
 <?php 
 include("php/config.php");
-
+session_start();
 $login_error = "";
 if (isset($_POST['email']) && isset($_POST['password']))
 {
-$email = $_POST['email'];
-$password = $_POST['password'];
+  $email = $_POST['email'];
+  $password = $_POST['password'];
 
-$hash = hash('sha256',$password);
+  $hash = hash('sha256',$password);
 
-$query = "SELECT password FROM User WHERE email = '$email'";
-$result = $db->query($query);
- $num_rows = $result->num_rows;
-   	$row = $result->fetch_array();
-              $_SESSION['email'] = $row['email'];
-           	if ($hash == $row['password']) {
+  $query = "SELECT password FROM User WHERE email = '$email'";
+  $result = $db->query($query);
+  $num_rows = $result->num_rows;
+  $row = $result->fetch_array();
+  $_SESSION['email'] = $email;
+  if ($hash == $row['password']) {
+    $login_error = "";
+    
+    #Get user information
+    $stmt = $db->stmt_init();
+    if($stmt->prepare("SELECT first_name, last_name, is_superuser FROM User WHERE email = '$email'")) {
+      $stmt->execute();
+      $stmt->bind_result($first_name, $last_name, $is_superuser);
+      $row = $stmt->fetch();
+      $_SESSION['first_name'] = $first_name;
+      $_SESSION['last_name'] = $last_name;
+      $_SESSION['is_superuser'] = $is_superuser;
+    }
+    $_SESSION['loggedin'] = true;
+    header("Location: wineries.php");
+  }
+  else
+  {
+    $login_error = "Invalid email or password.";
+    $_SESSION['loggedin'] = false;
+  }
+}
+function debug_to_console( $data ) {
 
-              $login_error = "";
-           		header("Location: index.php");
-           	}
-           	else
-           	{
-           		$login_error = "Invalid email or password.";
-           	}
+    if ( is_array( $data ) )
+        $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
+    else
+        $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
+
+    echo $output;
 }
 ?>
 

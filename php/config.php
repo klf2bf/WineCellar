@@ -4,4 +4,5 @@ if ($db->connect_errno) {
 	echo "Connection Error!";
 	exit();
 }
+session_start();
 ?>

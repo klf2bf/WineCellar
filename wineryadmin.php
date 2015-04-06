@@ -1,12 +1,11 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Winery</title>
+    <title>Your Winery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-    rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
     rel="stylesheet">
     <link href="css/style.css"rel="stylesheet">
@@ -30,29 +29,36 @@
           <ul class="nav navbar-nav navbar-right">
             <?php 
                 include("php/config.php");
+                
                 if (mysqli_connect_errno()) {
                     printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
                 }
-                $stmt = $db->stmt_init();
-                if($stmt->prepare("SELECT winery_name FROM Manages order by winery_name asc")) {
-                    $stmt->execute();
-                    $stmt->bind_result($winery_name);
+                $email = $_SESSION['email'];
+                if($_SESSION['loggedin']){
+                    $stmt = $db->stmt_init();
+                    if($stmt->prepare("SELECT winery_name FROM Winery WHERE owner_email='$email'")) {
+                        $stmt->execute();
+                        $stmt->bind_result($winery_name);
 
-                    while($stmt->fetch()){
-                        echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                        while($stmt->fetch()){
+                            echo "<li class='active'><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                        }
                     }
+                    $db->close();
+                    echo "<li><a href='account.php'>" . $_SESSION['first_name'] . " " . $_SESSION['last_name'] . "'s Account</a></li>";
+                    echo "<li><a href='logout.php'>Log Out</a></li>";
                 }
-                $db->close();
+                else {
+                    echo "<li><a href='login.php'>Log In</a></li>";
+                }
             ?>
-            <li><a href="account.html">Account</a></li>
-            <li><a href="login.html">Log In</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
   </nav>
   
 
-  <script type="text/javascript" src="js/winery.js"></script>
+    <script type="text/javascript" src="js/winery.js"></script>
     <div class="container main-container">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -61,7 +67,7 @@
                         include("php/config.php");
                         echo $_GET["winery_name"]
                         //$db->close();
-                    ?>
+                    ?> Admin
                 </h3>
             </div>
 
@@ -88,7 +94,10 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <a id="add_wine_review" class="btn pull-right btn-primary">Add Wine Review</a>
+                                        <?php
+                                            $winery=$_GET["winery_name"];
+                                            echo "<a href='add_wine.php?winery_name=$winery' class='btn pull-right btn-primary'>Add Wine</a>"
+                                        ?>
                                         <h3 class="panel-title">Wines</h3>
                                     </div>
                                     <div class="panel-body">
@@ -126,6 +135,10 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
+                                        <?php
+                                            $winery=$_GET["winery_name"];
+                                            echo "<a href='add_event.php?winery_name=$winery' class='btn pull-right btn-primary'>Add Event</a>"
+                                        ?>
                                         <h3 class="panel-title">Events</h3>
                                     </div>
                                     <div class="panel-body">
@@ -205,19 +218,58 @@
                                                         echo "Website: " . $row["website"] . "<br>";
                                                         echo "Owner: " . $row["owner"] . "<br>";
                                                         echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
-                                                        echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
+                                                        echo "<form action='php/update_winery_hours.php' class='form-inline' method='post'>";
+                                                        echo "<input type='hidden' name='winery' value='$winery_name'>";
+                                                        echo "<input type='hidden' name='day' value='" . $row["day_of_week"] . "'>";
+                                                        echo $row["day_of_week"] . ": " . "<input type='time' class='form-control' name='open' value='" . $row["open"] . "'> to <input type='time' class='form-control' name='close' value='" . $row["close"] . "'>";
+                                                        echo " <button type='submit' class='btn btn-default'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
+                                                        echo " <button type='submit' class='btn btn-default' formaction='php/delete_winery_hours.php'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>";
+                                                        echo "</form>";
                                                         $count = 1;
                                                     } else {
-                                                        echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
+                                                        echo "<form action='php/update_winery_hours.php' class='form-inline' method='post'>";
+                                                        echo "<input type='hidden' name='winery' value='$winery_name'>";
+                                                        echo "<input type='hidden' name='day' value='" . $row["day_of_week"] . "'>";
+                                                        echo $row["day_of_week"] . ": " . "<input type='time' class='form-control' name='open' value='" . $row["open"] . "'> to <input type='time' class='form-control' name='close' value='" . $row["close"] . "'>";
+                                                        echo " <button type='submit' class='btn btn-default'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
+                                                        echo " <button type='submit' class='btn btn-default' formaction='php/delete_winery_hours.php'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>";
+                                                        echo "</form>";
                                                     }
                                                 }
+                                                echo "<br>";
                                             } else {
                                                 echo "0 results";
                                             }
-                                            
                                             $db->close();
-
                                         ?>
+                                        <label>Add Hours:</label>
+                                        <form class='form-inline' action='php/add_winery_hours.php' method='post'>
+                                            <input type='hidden' name='winery' value='<?php
+                                                //include("php/config.php");
+                                                echo $_GET["winery_name"];
+                                            ?>'>
+                                            <div class='form-group'>
+                                                Day: 
+                                                <select required class='form-control' name='day'>
+                                                    <option value='Sunday'>Sunday</option>
+                                                    <option value='Monday'>Monday</option>
+                                                    <option value='Tuesday'>Tuesday</option>
+                                                    <option value='Wednesday'>Wednesday</option>
+                                                    <option value='Thursday'>Thursday</option>
+                                                    <option value='Friday'>Friday</option>
+                                                    <option value='Saturday'>Saturday</option>
+                                                </select>
+                                            </div>
+                                            <div class='form-group'>
+                                                Open:
+                                                <input class='form-control' required type='time' name='open'>
+                                            </div>
+                                            <div class='form-group'>
+                                                Close:
+                                                <input class='form-control' required type='time' name='close'>
+                                            </div>
+                                            <button type='submit' class='btn btn-default'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
