@@ -7,21 +7,11 @@
     $classification=$_POST['classification'];
     $grape_type_count = $_POST['grape_type_count'];
 
-    $sql = "INSERT INTO Wine (wine_name, year, classification) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO Wine (wine_name, year, classification, winery_name) VALUES (?, ?, ?, ?)";
     if($stmt->prepare($sql)) {
-        $stmt->bind_param('sis', $wine_name, $year, $classification);
+        $stmt->bind_param('siss', $wine_name, $year, $classification, $winery);
         $stmt->execute();
         $id=$stmt->insert_id;
-
-        // Add connection to winery 
-        $stmt_2 = $db->stmt_init();
-        $sql_2 = "INSERT INTO Produces (winery_name, wine_id) VALUES ('$winery', '$id')";
-        
-        if($stmt_2->prepare($sql_2)) {
-            $stmt_2->execute();
-        } else {
-            echo("error: " . htmlspecialchars($stmt_2->error));
-        }
 
         $grapes = $_POST['grapes'];
         // Add grape types
