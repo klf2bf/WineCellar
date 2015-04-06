@@ -97,7 +97,7 @@
                                             
                                             $winery_name = $_GET["winery_name"];
                                             echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
-                                            $sql = "SELECT * FROM `Wine` NATURAL JOIN `Produces` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
+                                            $sql = "SELECT * FROM `Wine` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
                                             $result = $db->query($sql);
 
                                             if ($result->num_rows > 0) {
@@ -132,7 +132,7 @@
                                         <?php
                                             include("php/config.php");
                                             $winery_name = $_GET["winery_name"];
-                                            $sql = "SELECT * FROM Event NATURAL JOIN Hosts WHERE winery_name=\"$winery_name\"";
+                                            $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\"";
                                             $result = $db->query($sql);
 
                                             if ($result->num_rows > 0) {

@@ -1,28 +1,27 @@
 <?php 
 include("php/config.php");
-
+session_start();
 $login_error = "";
 if (isset($_POST['email']) && isset($_POST['password']))
 {
-$email = $_POST['email'];
-$password = $_POST['password'];
+  $email = $_POST['email'];
+  $password = $_POST['password'];
 
-$hash = hash('sha256',$password);
+  $hash = hash('sha256',$password);
 
-$query = "SELECT password FROM User WHERE email = '$email'";
-$result = $db->query($query);
- $num_rows = $result->num_rows;
-   	$row = $result->fetch_array();
-              $_SESSION['email'] = $row['email'];
-           	if ($hash == $row['password']) {
-
-              $login_error = "";
-           		header("Location: index.php");
-           	}
-           	else
-           	{
-           		$login_error = "Invalid email or password.";
-           	}
+  $query = "SELECT password FROM User WHERE email = '$email'";
+  $result = $db->query($query);
+  $num_rows = $result->num_rows;
+  $row = $result->fetch_array();
+  $_SESSION['email'] = $email;
+  if ($hash == $row['password']) {
+    $login_error = "";
+    header("Location: wineries.php");
+  }
+  else
+  {
+    $login_error = "Invalid email or password.";
+  }
 }
 ?>
 

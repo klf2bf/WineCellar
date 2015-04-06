@@ -18,7 +18,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 
         if ($db->query($query) === TRUE) {
             $_SESSION['current_user'] = $email;
-            header("Location: index.html");
+            header("Location: wineries.php");
         } else {
             $account_error = $db->error;
         }

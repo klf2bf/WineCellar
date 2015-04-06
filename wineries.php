@@ -32,6 +32,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <?php 
                             include("php/config.php");
+                            
                             if (mysqli_connect_errno()) {
                                 printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
                             }
@@ -45,9 +46,9 @@
                                 }
                             }
                             $db->close();
+                            echo "<li><a href='account.html'>" . $_SESSION['email'] . "'s Account</a></li>";
                         ?>
-                        <li><a href="account.html">Account</a></li>
-                        <li><a href="login.html">Log In</a></li>
+                        <li><a href="login.php">Log In</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
