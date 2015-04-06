@@ -52,6 +52,7 @@
                                 echo "<li><a href='php/logout.php'>Log Out</a></li>";
                             }
                             else {
+                                echo "<li><a href='create_account.php'>Create Account</a></li>";
                                 echo "<li><a href='login.php'>Log In</a></li>";
                             }
                         ?>
