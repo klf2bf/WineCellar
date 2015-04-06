@@ -177,7 +177,7 @@
                                         if ($result->num_rows > 0) {
                                             // output data of each row
                                             while($row = $result->fetch_assoc()) {
-                                                echo $row["email"] . " says: (" . $row["rating"] . ") " . $row["description"] . "<br><br>";
+                                                echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["description"] . "<br><br>";
                                             }
                                         } else {
                                             echo "0 results";

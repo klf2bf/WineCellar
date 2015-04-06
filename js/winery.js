@@ -27,8 +27,11 @@ $(document).ready(function () {
 			url: 'submit_winery_review.php',
 			data: {'winery_name': winery_name, 'email': email, 'description': description, 'rating': rating},
 			success: function (data) {
-				window.location = "../winery.php?winery_name=" + wineryname;
-
+				if (data) {
+					alert(data)
+				} else {
+					window.location = "../winery.php?winery_name=" + wineryname + "#reviewTab";
+				} 
 			}
 		});
 		return false;
