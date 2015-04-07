@@ -277,18 +277,31 @@
                                                     echo "Website: " . $row["website"] . "<br>";
                                                     echo "Owner: " . $row["owner"] . "<br>";
                                                     echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
-                                                    echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
+                                                    echo $row["day_of_week"] . ": " . date('h:i a', strtotime($row['open'])) . " - " . date('h:i a', strtotime($row['close'])) . "<br>";
                                                     $count = 1;
                                                 } else {
-                                                    echo $row["day_of_week"] . ": " . $row["open"] . " - " . $row["close"] . "<br>";
+                                                    echo $row["day_of_week"] . ": " . date('h:i a', strtotime($row['open'])) . " - " . date('h:i a', strtotime($row['close'])) . "<br>";
                                                 }
                                             }
                                         } else {
                                             echo "0 results";
                                         }
 
-                                        $db->close();
+                                        
 
+                                        $stmt_2 = $db->stmt_init();
+                                        $sql_2 = "SELECT winery_email FROM Winery_Email WHERE winery_name=\"$winery_name\"";
+                                        if($stmt_2->prepare($sql_2)) {
+                                            $stmt_2->execute();
+                                            $stmt_2->bind_result($winery_email);
+                                            echo "</br>";
+                                            echo "Contact Email(s): <ul>";
+                                            while ($stmt_2->fetch()) {
+                                                echo "<li>" . $winery_email . "</li>";
+                                            }
+                                            echo "</ul>";
+                                        }
+                                        $db->close();
                                         ?>
                                     </div>
                                 </div>
