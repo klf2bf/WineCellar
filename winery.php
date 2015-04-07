@@ -13,7 +13,7 @@
     <link href="css/base_subpanels.css" rel="stylesheet">
 </head>
 <body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -95,34 +95,72 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
+                                        <?php
+                                            include("php/config.php");
+
+                                            $winery_name = $_GET["winery_name"];
+                                            echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
+                                        ?>
                                         <a id="add_wine_review" class="btn pull-right btn-primary">Add Wine Review</a>
                                         <h3 class="panel-title">Wines</h3>
                                     </div>
-                                    <div class="panel-body">
+                                    <!-- List group -->
+                                    <div>
+                                    Put sorting of Wine here!
+                                    </div>
+                                    <div class="panel list-group">
                                         <?php
-                                        include("php/config.php");
+                                            include("php/config.php");
 
-                                        $winery_name = $_GET["winery_name"];
-                                        echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
-                                        $sql = "SELECT * FROM `Wine` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
-                                        $result = $db->query($sql);
+                                            $winery_name = $_GET["winery_name"];
 
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            while($row = $result->fetch_assoc()) {
-                                                echo $row["wine_name"] . " (" . $row["year"] . ") " . $row["classification"] . "<br>";
+                                            $stmt = $db->stmt_init();
+                                            if($stmt->prepare("SELECT wine_id, wine_name, year, classification, price FROM Wine WHERE winery_name='$winery_name'")) {
+                                                $stmt->execute();
+                                                $stmt->store_result();
+                                                $stmt->bind_result($wine_id, $wine_name, $year, $classification, $price);
 
-                                                if ($row["email"]) {
-                                                    echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["comment"] . "<br>";
+                                                while($stmt->fetch()){
+                                                    echo "<a href='#' class='list-group-item' data-toggle='collapse' data-target='#wine_" . $wine_id . "' data-parent='#wines'>" . $wine_name . " (" . $year . ") " . $classification . "</a>";
+                                                    echo "<div id='wine_" . $wine_id . "' class='sublinks collapse'>
+                                                                <a class='list-group-item small'><ul>
+                                                                <li><u>Price:</u>" . $price . "</li>
+                                                                <li><u>Description:</u> " . $description . "</li>
+                                                                <li><u>Reviews:</u><ul>";
+                                                    $stmt_2 = $db->stmt_init();
+                                                    $sql_2 = "SELECT email, stars, comment, timestamp FROM Rate WHERE wine_id='$wine_id'";
+                                                    if($stmt_2->prepare($sql_2)) {
+                                                        $stmt_2->execute();
+                                                        $stmt_2->store_result();
+                                                        $stmt_2->bind_result($commenter_email, $stars, $comment, $timestamp);
+                                                        $num = $stmt_2->num_rows();
+                                                        if($num == 0){
+                                                            echo "&nbsp;&nbsp;No reviews";
+                                                        }
+                                                        while($stmt_2->fetch()){
+                                                            echo "<li>";
+                                                            for ($x = 0; $x < $stars; $x++)
+                                                            {
+                                                                echo "<span class='glyphicon glyphicon-star' aria-hidden='true'></span>";
+                                                            }
+                                                            for ($x = $stars; $x < 5; $x++)
+                                                            {
+                                                                echo "<span class='glyphicon glyphicon-star-empty' aria-hidden='true'></span>";
+                                                            }
+                                                            echo " by " . $commenter_email . " on " . $timestamp;
+                                                            echo "</br><p>" . $comment . "</p></li>";
+                                                        }  
+
+
+                                                    } else {
+                                                        echo("error: " . htmlspecialchars($stmt_2->error));
+                                                    }
+                                                    echo "</ul></li></ul></a>
+                                                            </div>";
                                                 }
-                                                echo "<br>";
                                             }
-                                        } else {
-                                            echo "0 results";
-                                        }
 
-                                        $db->close();
-
+                                            $db->close();
                                         ?>
                                     </div>
                                 </div>
@@ -135,18 +173,24 @@
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Events</h3>
                                     </div>
-                                    <div class="panel-body">
+                                    <div>
+                                    </div>
+                                    <div class="panel list-group">
                                         <?php
                                         include("php/config.php");
                                         $winery_name = $_GET["winery_name"];
-                                        $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\"";
+                                        $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\" ORDER BY date DESC";
                                         $result = $db->query($sql);
-
+                                        
                                         if ($result->num_rows > 0) {
+                                            $count = 0;
                                             // output data of each row
                                             while($row = $result->fetch_assoc()) {
-                                                echo $row["event_name"] . " (" . $row["date"] . "): " . $row["description"] . "<br>";
-                                                echo "(" . $row["start"] . " - " . $row[end] . ")" . "<br><br>";
+                                                echo "<a  class='list-group-item' data-toggle='collapse' data-target='#event_" . $count . "'>" . $row["event_name"] . " - " .  $row["date"] . "</a>";
+                                                echo "<div id='event_" . $count . "' class='sublinks collapse'>
+                                                    <a class='list-group-item small tab'>" . date('h:i a', strtotime($row['start'])) . " - " . date('h:i a', strtotime($row['end'])) . "</br>
+                                                    " . $row['description'] . "</a></div>";
+                                                $count++;
                                             }
                                         } else {
                                             echo "0 results";

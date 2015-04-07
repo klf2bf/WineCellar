@@ -85,3 +85,6 @@ display: table-cell !important;
 .bottom-margin{
   margin-bottom: 5px;
 }
+.tab { 
+  margin-left: 40px; 
+}
