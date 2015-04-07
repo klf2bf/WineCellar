@@ -49,9 +49,12 @@ $(document).ready(function () {
 			url: 'submit_wine_review.php',
 			data: {'wine_id': wine_id, 'email': email, 'comment': comment, 'stars': stars},
 			success: function (data) {
-				$('#submit_wine_review')[0].reset();
-				window.location = "../winery.php?winery_name=" + winery_name;
-
+				if (data) {
+					alert(data);
+				} else {
+					$('#submit_wine_review')[0].reset();
+					window.location = "../winery.php?winery_name=" + winery_name;
+				}
 			}
 		});
 		return false;
