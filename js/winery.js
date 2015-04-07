@@ -12,6 +12,17 @@ $(document).ready(function () {
 
 	});
 
+	$("#export_reviews").click(function(){
+		$.ajax({
+			type: "POST",
+			url: 'export_reviews.php',
+			data: {},
+			// success: function (data) {
+			// 	alert(data)
+			// }
+		});
+	});
+
 	$("#add_wine_review").click(function(){
 		var winery_name = $("#winery_name").val();
 		window.location = "../add_wine_review.php?winery_name=" + winery_name;
