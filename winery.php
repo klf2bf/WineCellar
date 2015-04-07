@@ -216,18 +216,38 @@
                                         <?php
                                         include("php/config.php");
                                         $winery_name = $_GET["winery_name"];
-                                        $sql = "SELECT * FROM Reviews WHERE winery_name=\"$winery_name\" ORDER BY timestamp DESC";
-                                        $result = $db->query($sql);
+                                        $stmt_2 = $db->stmt_init();
+                                        $sql_2 = "SELECT first_name, stars, description, timestamp FROM Reviews NATURAL JOIN User WHERE winery_name='$winery_name'";
+                                        if($stmt_2->prepare($sql_2)) {
+                                            $stmt_2->execute();
+                                            $stmt_2->store_result();
+                                            $stmt_2->bind_result($commenter_name, $stars, $description, $timestamp);
+                                            $num = $stmt_2->num_rows();
 
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            while($row = $result->fetch_assoc()) {
-                                                echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["description"] . "<br><br>";
+                                            $timeStamp = strtotime($timestamp);
+                                            $date = date('d-m-Y', $timeStamp);
+
+                                            if($num == 0){
+                                                echo "&nbsp;&nbsp;No reviews";
                                             }
-                                        } else {
-                                            echo "0 results";
-                                        }
+                                            while($stmt_2->fetch()){
+                                                echo "<div>";
+                                                for ($x = 0; $x < $stars; $x++)
+                                                {
+                                                    echo "<span class='glyphicon glyphicon-star' aria-hidden='true'></span>";
+                                                }
+                                                for ($x = $stars; $x < 5; $x++)
+                                                {
+                                                    echo "<span class='glyphicon glyphicon-star-empty' aria-hidden='true'></span>";
+                                                }
+                                                echo " by " . $commenter_name . " on " . $date;
+                                                echo "</br><p>" . $description . "</p></br></div>";
+                                            }  
 
+
+                                        } else {
+                                            echo("error: " . htmlspecialchars($stmt_2->error));
+                                        }
                                         $db->close();
 
                                         ?>
