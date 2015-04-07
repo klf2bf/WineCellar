@@ -20,7 +20,7 @@ $(document).ready(function () {
 		var wineryname = $("#winery_name").val();
 		var email = $("#email").val();
 		var description = $("#description").val();
-		var rating = $("#rating").val();
+		var rating = $("#stars").val();
 				
 		$.ajax({
 			type: "POST",

@@ -12,9 +12,10 @@
     <link href="css/style.css"rel="stylesheet">
   </head>
   <body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>  
   <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="js/winery.js"></script>
+  <script src="js/bootstrap-rating-input.min.js" type="text/javascript"></script>
   
   <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -72,11 +73,11 @@
             	<form action="submit_winery_review.php" method="post" id="new_winery_review">
                 <div class='form-group'>
                   <label for='description'>Description</label>
-                  <input class='form-control' type="text" cols="40" rows="5" style="width: 100%; height:100px;" id="description" name="description" required maxlength="350" placeholder="">
+                  <textarea class='form-control' type="text" cols="40" rows="5" style="width: 100%; height:100px;" id="description" name="description" required maxlength="350" placeholder=""></textarea>
                 </div>
                 <div class='form-group'>
-                  <label for='rating'>Stars</label>
-                  <input class='form-control' type="number" name="rating" id="rating" min="1" max="5" required>
+                  <label for='stars'>Stars</label>
+                  <input class='rating' data-max="5" data-min="1" type="number" name="stars" id="stars">
                 </div>
                 <?php
                   $winery_name = $_GET["winery_name"];
@@ -85,7 +86,8 @@
                   echo "<input type='hidden' id='email' name='email' value='" . $email . "'>";
                 ?>
 
-            		<a type="submit" id="submit" class="btn pull-left btn-primary">Submit</a>
+            		<a type="submit" id="submit" class="btn pull-left btn-primary" style="margin-right: 3px;">Submit</a>
+                <p> </p>
                 <a type="cancel" id="cancel" class="btn pull-left btn-default">Cancel</a>
 
             	</form>
