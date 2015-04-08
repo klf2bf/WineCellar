@@ -61,6 +61,9 @@
 
 
     <script type="text/javascript" src="js/winery.js"></script>
+    <script>
+        filterWines("All");
+    </script>
     <div class="container main-container">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -95,10 +98,13 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
+
                                         <?php
                                             include("php/config.php");
 
                                             $winery_name = $_GET["winery_name"];
+                                            $_SESSION['winery_name'] = $winery_name;
+
                                             echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
                                         ?>
                                         <a id="add_wine_review" class="btn pull-right btn-primary">Add Wine Review</a>
@@ -106,62 +112,34 @@
                                     </div>
                                     <!-- List group -->
                                     <div>
-                                    Put sorting of Wine here!
-                                    </div>
-                                    <div class="panel list-group">
-                                        <?php
-                                            include("php/config.php");
+                                        <div class="dropdown">
+                                            <button style="width: 99.9%;" class="btn btn-default dropdown-toggle" type="button" id="classification" data-toggle="dropdown" aria-expanded="true">
+                                            Type of Wine
+                                            <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" style="width: 99.8%;" role="menu" aria-labelledby="classification">
+                                                <?php
+                                                    include("php/config.php");
+                                                    $winery_name = $_GET["winery_name"];
+                                                    $_SESSION['winery_name'] = $winery_name;
+                                                    $stmt = $db->stmt_init();
+                                                    $sql = "SELECT classification FROM Wine WHERE winery_name='$winery_name' GROUP BY classification";
+                                                    if ($stmt->prepare($sql)) {
+                                                        $stmt->execute();
+                                                        $stmt->store_result();
+                                                        $stmt->bind_result($classification);
 
-                                            $winery_name = $_GET["winery_name"];
-
-                                            $stmt = $db->stmt_init();
-                                            if($stmt->prepare("SELECT wine_id, wine_name, year, classification, price FROM Wine WHERE winery_name='$winery_name'")) {
-                                                $stmt->execute();
-                                                $stmt->store_result();
-                                                $stmt->bind_result($wine_id, $wine_name, $year, $classification, $price);
-
-                                                while($stmt->fetch()){
-                                                    echo "<a href='#' class='list-group-item' data-toggle='collapse' data-target='#wine_" . $wine_id . "' data-parent='#wines'>" . $wine_name . " (" . $year . ") " . $classification . "</a>";
-                                                    echo "<div id='wine_" . $wine_id . "' class='sublinks collapse'>
-                                                                <a class='list-group-item small'><ul>
-                                                                <li><u>Price:</u>" . $price . "</li>
-                                                                <li><u>Description:</u> " . $description . "</li>
-                                                                <li><u>Reviews:</u><ul>";
-                                                    $stmt_2 = $db->stmt_init();
-                                                    $sql_2 = "SELECT email, stars, comment, timestamp FROM Rate WHERE wine_id='$wine_id'";
-                                                    if($stmt_2->prepare($sql_2)) {
-                                                        $stmt_2->execute();
-                                                        $stmt_2->store_result();
-                                                        $stmt_2->bind_result($commenter_email, $stars, $comment, $timestamp);
-                                                        $num = $stmt_2->num_rows();
-                                                        if($num == 0){
-                                                            echo "&nbsp;&nbsp;No reviews";
+                                                        while ($stmt->fetch()) {
+                                                            echo "<li role='presentation'><a role='menuitem' tabindex='-1' href='#'>" . $classification . "</a></li>";
                                                         }
-                                                        while($stmt_2->fetch()){
-                                                            echo "<li>";
-                                                            for ($x = 0; $x < $stars; $x++)
-                                                            {
-                                                                echo "<span class='glyphicon glyphicon-star' aria-hidden='true'></span>";
-                                                            }
-                                                            for ($x = $stars; $x < 5; $x++)
-                                                            {
-                                                                echo "<span class='glyphicon glyphicon-star-empty' aria-hidden='true'></span>";
-                                                            }
-                                                            echo " by " . $commenter_email . " on " . $timestamp;
-                                                            echo "</br><p>" . $comment . "</p></li>";
-                                                        }  
-
-
-                                                    } else {
-                                                        echo("error: " . htmlspecialchars($stmt_2->error));
                                                     }
-                                                    echo "</ul></li></ul></a>
-                                                            </div>";
-                                                }
-                                            }
+                                                ?>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">All</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="panel list-group" id="wine-data">
 
-                                            $db->close();
-                                        ?>
                                     </div>
                                 </div>
                             </div>

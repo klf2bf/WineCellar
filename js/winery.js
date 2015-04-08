@@ -1,3 +1,13 @@
+function filterWines(classification) {
+	$.ajax({
+		type: "POST",
+		url: 'filter_wine.php',
+		data: {'class': classification},
+		success: function (data) {
+			$("#wine-data")[0].innerHTML = data;
+		}
+	});
+}
 $(document).ready(function () {
 
 	if ($("#review_title").length > 0) {
@@ -17,16 +27,26 @@ $(document).ready(function () {
 			type: "POST",
 			url: 'export_reviews.php',
 			data: {},
-			// success: function (data) {
-			// 	alert(data)
-			// }
+		});
+	});
+
+	$(".dropdown-menu>li>a").click(function(data) {
+		var type = data.toElement.text;
+		$.ajax({
+			type: "POST",
+			url: 'filter_wine.php',
+			data: {'type': type},
+			success: function(data) {
+				filterWines(type);
+			}
 		});
 	});
 
 	$("#add_wine_review").click(function(){
 		var winery_name = $("#winery_name").val();
 		window.location = "../add_wine_review.php?winery_name=" + winery_name;
-	})
+	});
+
 	$("#submit").click(function(event) {
 		var wineryname = $("#winery_name").val();
 		var email = $("#email").val();
