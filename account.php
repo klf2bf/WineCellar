@@ -10,6 +10,12 @@
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
     rel="stylesheet">
     <link href="css/style.css"rel="stylesheet">
+
+    <script type="text/javascript">
+        function deleteFavorite(wine_id) {
+            $.post("php/delete_favorite.php", { "wine_id" : wine_id}, function() { location.reload();});
+        }
+    </script>
 </head>
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -107,61 +113,63 @@
                     </div>
 
                     <div class="tab-pane" id="favoritesTab">
-                        <div class="main-panel-body">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                       <div class="main-panel-body">
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
 
 
-                                    <h3 class="panel-title">Favorites</h3>
-                                </div>
-                                <div>
-                                    <?php
-                                    $email = $_SESSION['email'];
-                                    $sql = "SELECT * FROM Favorites NATURAL JOIN Wine WHERE email='$email' GROUP BY email";
-                                    $result = $db->query($sql);
+                                <h3 class="panel-title">Favorites</h3>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                $email = $_SESSION['email'];
+                                $sql = "SELECT * FROM Favorites NATURAL JOIN Wine WHERE email='$email' GROUP BY email";
+                                $result = $db->query($sql);
 
-                                    while($row = $result->fetch_assoc()) {
-                                        echo "<b>" . $row['wine_name'] . "</b><br>";
-                                        echo "Price: " . $row['price'] . "<br>";
-                                        echo "Description: " . $row['description'] . "<br>";
-                                        echo "<br>";
-                                    }
-                                    ?>
-                                </div>
+                                while($row = $result->fetch_assoc()) {
+                                    echo "<b>" . $row['wine_name'] . "</b>";
+                                    echo "<button onclick='deleteFavorite(" . $row['wine_id'] . ")' class='btn btn-danger btn-xs' > <span class='glyphicon glyphicon-trash'></span></button><br>";
+
+                                    echo "Price: " . $row['price'] . "<br>";
+                                    echo "Description: " . $row['description'] . "<br>";
+                                    echo "<br>";
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="tab-pane" id="reviewsTab">
-                        <div class="main-panel-body">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                <div class="tab-pane" id="reviewsTab">
+                    <div class="main-panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
 
 
-                                    <h3 class="panel-title">Winery Reviews</h3>
-                                </div>
-                                <div>
-                                    <?php
-                                    $email = $_SESSION['email'];
-                                    $sql = "SELECT * FROM Reviews WHERE email='$email'";
-                                    $result = $db->query($sql);
+                                <h3 class="panel-title">Winery Reviews</h3>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                $email = $_SESSION['email'];
+                                $sql = "SELECT * FROM Reviews WHERE email='$email'";
+                                $result = $db->query($sql);
 
-                                    while($row = $result->fetch_assoc()) {
-                                        echo "<b>" . $row['winery_name'] . "</b><br>";
-                                        echo "Date Visited: " . $row['timestamp'] . "<br>";
-                                        echo "Review: " . $row['description'] . "<br>";
-                                        echo "<br>";
-                                    }
-                                    ?>
+                                while($row = $result->fetch_assoc()) {
+                                    echo "<b>" . $row['winery_name'] . "</b><br>";
+                                    echo "Date Visited: " . $row['timestamp'] . "<br>";
+                                    echo "Review: " . $row['description'] . "<br>";
+                                    echo "<br>";
+                                }
+                                ?>
 
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-        </body>
-        </html>
+    </div>
+    </body>
+    </html>
