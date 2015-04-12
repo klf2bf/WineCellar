@@ -1,25 +1,44 @@
 <?php
 	include("php/config.php");
 	$stmt = $db->stmt_init();
+    $stmt_4 = $db->stmt_init();
 	$winery_name = $_SESSION['winery_name'];
     $type = $_POST["class"];
-
+    $email = $_SESSION['email'];
     if ($type == "All") {
         $sql = "SELECT wine_id, wine_name, year, classification, price, description FROM Wine WHERE winery_name='$winery_name'";
     } else {
         $sql = "SELECT wine_id, wine_name, year, classification, price, description FROM Wine WHERE winery_name='$winery_name' AND classification='$type'";
     }
 
+    $sql_4 = "SELECT wine_id FROM Favorites WHERE email='$email'";
     
-    
+    if($stmt_4->prepare($sql_4)){
+        $stmt_4->execute();
+        $stmt_4->store_result();
+        $stmt_4->bind_result($favorite_id);
+        $i = 0;
+        while($stmt_4->fetch()){
+            $favorites[$i] = $favorite_id;
+            $i++;
+        }
+    }
     if($stmt->prepare($sql)) {
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($wine_id, $wine_name, $year, $classification, $price, $description);
         while($stmt->fetch()){
-            echo "<a href='#' class='list-group-item' data-toggle='collapse' data-target='#wine_" . $wine_id . "' data-parent='#wines'>" . $wine_name . " (" . $year . ") " . $classification . "</a>";
+            if (in_array($wine_id, $favorites)) {
+                $form = " <span class='glyphicon glyphicon-heart' aria-hidden='true'></span>";
+                $form_2 = "<form action='php/remove_favorite.php' method='post'><input type='hidden' name='wine_id' value='" . $wine_id . "'/><button class='btn btn-primary' type='submit'>Unfavorite?</button></form>";
+            } else {
+                $form = "";
+                $form_2 = "<form action='php/add_favorite.php' method='post'><input type='hidden' name='wine_id' value='" . $wine_id . "'/><button class='btn btn-primary' type='submit'>Favorite?</button></form>";
+            }
+            echo "<a href='#' class='list-group-item' data-toggle='collapse' data-target='#wine_" . $wine_id . "' data-parent='#wines'>" . $wine_name . " (" . $year . ") " . $classification . $form . " </a>";
             echo "<div id='wine_" . $wine_id . "' class='sublinks collapse'>
                         <a class='list-group-item small'><ul>
+                        <li>" . $form_2 . "</li>
                         <li><u>Price: </u>" . $price . "</li>
                         <li><u>Description: </u> " . $description . "</li>";
                         
@@ -41,6 +60,7 @@
             }
 
             echo "<li><u>Reviews: </u><ul>";
+
             $stmt_2 = $db->stmt_init();
             $sql_2 = "SELECT email, stars, comment, timestamp FROM Rate WHERE wine_id='$wine_id'";
             if($stmt_2->prepare($sql_2)) {
