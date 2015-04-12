@@ -1,4 +1,6 @@
 <?php
+	session_start();
+
 	header('Content-Type: text/csv; charset=utf-8');
 	header('Content-Disposition: attachment; filename=winery_reviews.csv;');
 
@@ -10,12 +12,16 @@
 	$db = 'cs4750klf2bf';
 	$user = 'cs4750klf2bf';
 	$pass = 'wine';
+	$winery_name = $_SESSION['admin_winery_name'];
 
 	mysql_connect($host, $user, $pass);
 	mysql_select_db($db);
-	$rows = mysql_query('Select * From Reviews');
+
+	$query = "Select * From Reviews Where winery_name='$winery_name'";
+	$rows = mysql_query($query);
 	
 	while($row = mysql_fetch_assoc($rows)) {
 		fputcsv($output, $row);
 	}
+	
 ?>

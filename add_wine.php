@@ -56,7 +56,7 @@
                             $stmt->bind_result($winery_name);
 
                             while($stmt->fetch()){
-                                echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                                echo "<li><a href='wineryadmin.php'>Manage " . $winery_name . "</a></li>";
                             }
                         }
                         $db->close();

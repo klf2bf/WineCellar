@@ -43,7 +43,7 @@
                             $stmt->bind_result($winery_name);
 
                             while($stmt->fetch()){
-                                echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                                echo "<li><a href='wineryadmin.php'>Manage " . $winery_name . "</a></li>";
                                 $_SESSION['admin'] = TRUE;
                             }
                         }
@@ -196,9 +196,6 @@
                                         include("php/config");
                                         if ($_SESSION['loggedin']) {
                                             echo "<a id='add_winery_review' class='btn pull-right btn-primary'>Add Winery Review</a>";
-                                            if ($_SESSION['admin']) {
-                                                echo "<a id='export_reviews' style='margin-right: 3px;' class='btn pull-right btn-primary'>Export Reviews</a>";
-                                            }
                                         }
                                         ?>
                                         <h3 class="panel-title">Reviews</h3>
