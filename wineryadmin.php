@@ -114,6 +114,7 @@
                                     <div class="panel-heading">
                                         <?php
                                             echo "<a href='add_wine.php?winery_name=$winery_name' class='btn pull-right btn-primary'>Add Wine</a>";
+                                            echo "<a href='php/export_wine_reviews.php' style='margin-right: 3px;' class='btn pull-right btn-primary'>Export Reviews</a>";
                                             $_SESSION['winery_name'] = $winery_name;
 
                                             echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
