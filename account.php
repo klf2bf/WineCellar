@@ -15,6 +15,10 @@
         function deleteFavorite(wine_id) {
             $.post("php/delete_favorite.php", { "wine_id" : wine_id}, function() { location.reload();});
         }
+
+        function deleteReview(email,time_stamp) {
+            $.post("php/delete_review.php", {"email" : email, "time_stamp" : time_stamp}, function() { location.reload();});
+        }
     </script>
 </head>
 <body>
@@ -157,6 +161,7 @@
 
                                 while($row = $result->fetch_assoc()) {
                                     echo "<b>" . $row['winery_name'] . "</b><br>";
+                                    echo "<button onclick='deleteReview(\"" . $row['email'] . "\",\"" . $row['timestamp'] . "\")' class='btn btn-danger btn-xs' > <span class='glyphicon glyphicon-trash'></span></button><br>";
                                     echo "Date Visited: " . $row['timestamp'] . "<br>";
                                     echo "Review: " . $row['description'] . "<br>";
                                     echo "<br>";
