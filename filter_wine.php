@@ -20,9 +20,27 @@
             echo "<a href='#' class='list-group-item' data-toggle='collapse' data-target='#wine_" . $wine_id . "' data-parent='#wines'>" . $wine_name . " (" . $year . ") " . $classification . "</a>";
             echo "<div id='wine_" . $wine_id . "' class='sublinks collapse'>
                         <a class='list-group-item small'><ul>
-                        <li><u>Price:</u>" . $price . "</li>
-                        <li><u>Description:</u> " . $description . "</li>
-                        <li><u>Reviews:</u><ul>";
+                        <li><u>Price: </u>" . $price . "</li>
+                        <li><u>Description: </u> " . $description . "</li>";
+                        
+
+            $stmt_3 = $db->stmt_init();
+            $sql_3 = "SELECT type_of_grape FROM Type_of_Grape WHERE wine_id=$wine_id";
+            if($stmt_3->prepare($sql_3)) {
+                $stmt_3->execute();
+                $stmt_3->store_result();
+                $stmt_3->bind_result($type_of_grape);
+                echo "<li><u>Type of Grapes: </u>";
+                echo "<ul>";
+                while($stmt_3->fetch()) {
+                    echo "<li>" . $type_of_grape . "</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo("error: " . htmlspecialchars($stmt_2->error));
+            }
+
+            echo "<li><u>Reviews: </u><ul>";
             $stmt_2 = $db->stmt_init();
             $sql_2 = "SELECT email, stars, comment, timestamp FROM Rate WHERE wine_id='$wine_id'";
             if($stmt_2->prepare($sql_2)) {
