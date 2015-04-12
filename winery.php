@@ -30,6 +30,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <?php 
                     include("php/config.php");
+                    $_SESSION['admin'] = FALSE;
 
                     if (mysqli_connect_errno()) {
                         printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
@@ -42,7 +43,8 @@
                             $stmt->bind_result($winery_name);
 
                             while($stmt->fetch()){
-                                echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                                echo "<li><a href='wineryadmin.php'>Manage " . $winery_name . "</a></li>";
+                                $_SESSION['admin'] = TRUE;
                             }
                         }
                         $db->close();
@@ -106,8 +108,11 @@
                                             $_SESSION['winery_name'] = $winery_name;
 
                                             echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
+                                        
+                                        if ($_SESSION['loggedin']) {
+                                            echo "<a id='add_wine_review' class='btn pull-right btn-primary'>Add Wine Review</a>";
+                                        }
                                         ?>
-                                        <a id="add_wine_review" class="btn pull-right btn-primary">Add Wine Review</a>
                                         <h3 class="panel-title">Wines</h3>
                                     </div>
                                     <!-- List group -->
@@ -133,6 +138,7 @@
                                                             echo "<li role='presentation'><a role='menuitem' tabindex='-1' href='#'>" . $classification . "</a></li>";
                                                         }
                                                     }
+                                                    $db->close();
                                                 ?>
                                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">All</a></li>
                                             </ul>
@@ -186,8 +192,12 @@
                             <div class="main-panel-body">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <a id="add_winery_review" class="btn pull-right btn-primary">Add Winery Review</a>
-                                        <a href="http://localhost:8888/export_reviews.php" style="margin-right: 3px;" class="btn pull-right btn-primary">Export Reviews</a>
+                                        <?php
+                                        include("php/config");
+                                        if ($_SESSION['loggedin']) {
+                                            echo "<a id='add_winery_review' class='btn pull-right btn-primary'>Add Winery Review</a>";
+                                        }
+                                        ?>
                                         <h3 class="panel-title">Reviews</h3>
                                     </div>
                                     <div class="panel-body">
@@ -298,6 +308,6 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>
+
