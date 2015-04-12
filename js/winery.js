@@ -25,7 +25,7 @@ $(document).ready(function () {
 	$("#export_reviews").click(function(){
 		$.ajax({
 			type: "POST",
-			url: 'export_reviews.php',
+			url: 'php/export_reviews.php',
 			data: {},
 		});
 	});

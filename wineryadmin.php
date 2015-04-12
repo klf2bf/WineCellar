@@ -45,6 +45,8 @@
                     printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
                 }
                 $email = $_SESSION['email'];
+                $_SESSION['admin_winery_name'] = "";
+
                 if($_SESSION['loggedin']){
                     $stmt = $db->stmt_init();
                     if($stmt->prepare("SELECT winery_name FROM Winery WHERE owner_email='$email'")) {
@@ -53,6 +55,7 @@
 
                         while($stmt->fetch()){
                             echo "<li class='active'><a href='wineryadmin.php'>Manage " . $winery_name . "</a></li>";
+                            $_SESSION['admin_winery_name'] = $winery_name;
                         }
                     }
                     $db->close();
