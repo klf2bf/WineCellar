@@ -70,6 +70,9 @@
   
 
     <script type="text/javascript" src="js/winery.js"></script>
+    <script>
+        filterWines("All");
+    </script>
     <div class="container main-container">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -107,34 +110,42 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <?php
-                                            echo "<a href='add_wine.php?winery_name=$winery_name' class='btn pull-right btn-primary'>Add Wine</a>"
+                                            echo "<a href='add_wine.php?winery_name=$winery_name' class='btn pull-right btn-primary'>Add Wine</a>";
+                                            $_SESSION['winery_name'] = $winery_name;
+
+                                            echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
                                         ?>
                                         <h3 class="panel-title">Wines</h3>
                                     </div>
-                                    <div class="panel-body">
-                                        <?php
-                                            include("php/config.php");
-                                            echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
-                                            $sql = "SELECT * FROM `Wine` LEFT JOIN `Rate` ON Rate.wine_id=Wine.wine_id WHERE winery_name=\"$winery_name\"";
-                                            $result = $db->query($sql);
+                                    <div>
+                                        <div class="dropdown">
+                                            <button style="width: 99.9%;" class="btn btn-default dropdown-toggle" type="button" id="classification" data-toggle="dropdown" aria-expanded="true">
+                                            Type of Wine
+                                            <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" style="width: 99.8%;" role="menu" aria-labelledby="classification">
+                                                <?php
+                                                    include("php/config.php");
+                                                    $winery_name = $winery_name;
+                                                    $_SESSION['winery_name'] = $winery_name;
+                                                    $stmt = $db->stmt_init();
+                                                    $sql = "SELECT classification FROM Wine WHERE winery_name='$winery_name' GROUP BY classification";
+                                                    if ($stmt->prepare($sql)) {
+                                                        $stmt->execute();
+                                                        $stmt->store_result();
+                                                        $stmt->bind_result($classification);
 
-                                            if ($result->num_rows > 0) {
-                                                // output data of each row
-                                                while($row = $result->fetch_assoc()) {
-                                                    echo $row["wine_name"] . " (" . $row["year"] . ") " . $row["classification"] . "<br>";
-                                                    
-                                                    if ($row["email"]) {
-                                                        echo $row["email"] . " says: (" . $row["stars"] . ") " . $row["comment"] . "<br>";
+                                                        while ($stmt->fetch()) {
+                                                            echo "<li role='presentation'><a role='menuitem' tabindex='-1' href='#'>" . $classification . "</a></li>";
+                                                        }
                                                     }
-                                                    echo "<br>";
-                                                }
-                                            } else {
-                                                echo "0 results";
-                                            }
-                                            
-                                            $db->close();
+                                                ?>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">All</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="panel list-group" id="wine-data">
 
-                                        ?>
                                     </div>
                                 </div>
                             </div>
@@ -149,23 +160,29 @@
                                         ?>
                                         <h3 class="panel-title">Events</h3>
                                     </div>
-                                    <div class="panel-body">
+                                    <div>
+                                    </div>
+                                    <div class="panel list-group">
                                         <?php
-                                            include("php/config.php");
-                                            $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\"";
-                                            $result = $db->query($sql);
-
-                                            if ($result->num_rows > 0) {
-                                                // output data of each row
-                                                while($row = $result->fetch_assoc()) {
-                                                    echo $row["event_name"] . " (" . $row["date"] . "): " . $row["description"] . "<br>";
-                                                    echo "(" . $row["start"] . " - " . $row[end] . ")" . "<br><br>";
-                                                }
-                                            } else {
-                                                echo "0 results";
+                                        include("php/config.php");
+                                        $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\" ORDER BY date DESC";
+                                        $result = $db->query($sql);
+                                        
+                                        if ($result->num_rows > 0) {
+                                            $count = 0;
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) {
+                                                echo "<a  class='list-group-item' data-toggle='collapse' data-target='#event_" . $count . "'>" . $row["event_name"] . " - " .  $row["date"] . "</a>";
+                                                echo "<div id='event_" . $count . "' class='sublinks collapse'>
+                                                    <a class='list-group-item small tab'>" . date('h:i a', strtotime($row['start'])) . " - " . date('h:i a', strtotime($row['end'])) . "</br>
+                                                    " . $row['description'] . "</a></div>";
+                                                $count++;
                                             }
-                                            
-                                            $db->close();
+                                        } else {
+                                            echo "0 results";
+                                        }
+
+                                        $db->close();
 
                                         ?>
                                     </div>
@@ -184,7 +201,6 @@
                                     <div class="panel-body">
                                         <?php
                                         include("php/config.php");
-                                        $winery_name = $_GET["winery_name"];
                                         $stmt_2 = $db->stmt_init();
                                         $sql_2 = "SELECT first_name, stars, description, timestamp FROM Reviews NATURAL JOIN User WHERE winery_name='$winery_name'";
                                         if($stmt_2->prepare($sql_2)) {
