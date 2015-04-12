@@ -42,7 +42,7 @@
                             $stmt->bind_result($winery_name);
 
                             while($stmt->fetch()){
-                                echo "<li><a href='wineryadmin.php?winery_name=" . $winery_name . "'>Manage " . $winery_name . "</a></li>";
+                                echo "<li><a href='wineryadmin.php'>Manage " . $winery_name . "</a></li>";
                             }
                         }
                         $db->close();
@@ -187,7 +187,6 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <a id="add_winery_review" class="btn pull-right btn-primary">Add Winery Review</a>
-                                        <a href="http://localhost:8888/export_reviews.php" style="margin-right: 3px;" class="btn pull-right btn-primary">Export Reviews</a>
                                         <h3 class="panel-title">Reviews</h3>
                                     </div>
                                     <div class="panel-body">
