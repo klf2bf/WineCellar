@@ -195,7 +195,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <a id="add_winery_review" class="btn pull-right btn-primary">Add Winery Review</a>
-                                        <a href="php/export_reviews.php" style="margin-right: 3px;" class="btn pull-right btn-primary">Export Reviews</a>
+                                        <a href="php/export_reviews.php" id='export_reviews' style="margin-right: 3px;" class="btn pull-right btn-primary">Export Reviews</a>
                                         <h3 class="panel-title">Reviews</h3>
                                     </div>
                                     <div class="panel-body">
