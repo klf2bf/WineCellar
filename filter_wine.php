@@ -30,10 +30,10 @@
         while($stmt->fetch()){
             if (in_array($wine_id, $favorites)) {
                 $form = " <span class='glyphicon glyphicon-heart' aria-hidden='true'></span>";
-                $form_2 = "<form action='php/remove_favorite.php' method='post'><input type='hidden' name='wine_id' value='" . $wine_id . "'/><button class='btn btn-primary' type='submit'>Unfavorite?</button></form>";
+                $form_2 = "<form action='php/remove_favorite.php' method='post'><input type='hidden' name='wine_id' value='" . $wine_id . "'/><button class='btn btn-xs btn-primary' type='submit'>Unfavorite?</button></form>";
             } else {
                 $form = "";
-                $form_2 = "<form action='php/add_favorite.php' method='post'><input type='hidden' name='wine_id' value='" . $wine_id . "'/><button class='btn btn-primary' type='submit'>Favorite?</button></form>";
+                $form_2 = "<form action='php/add_favorite.php' method='post'><input type='hidden' name='wine_id' value='" . $wine_id . "'/><button class='btn btn-xs btn-primary' type='submit'>Favorite?</button></form>";
             }
             echo "<a href='#' class='list-group-item' data-toggle='collapse' data-target='#wine_" . $wine_id . "' data-parent='#wines'>" . $wine_name . " (" . $year . ") " . $classification . $form . " </a>";
             echo "<div id='wine_" . $wine_id . "' class='sublinks collapse'>
