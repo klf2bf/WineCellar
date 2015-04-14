@@ -5,6 +5,7 @@ function filterWines(classification) {
 		data: {'class': classification},
 		success: function (data) {
 			$("#wine-data")[0].innerHTML = data;
+			$('input.rating').rating();
 		}
 	});
 }
