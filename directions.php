@@ -44,8 +44,13 @@ function calcRoute() {
     travelMode: google.maps.TravelMode.DRIVING
   };
   directionsService.route(request, function(response, status) {
+    console.log(status);
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
+    }
+    else {
+      alert("Invalid address.");
+      window.location.href = document.referrer + "#informationTab";
     }
   });
 }

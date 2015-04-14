@@ -294,7 +294,8 @@
                                         ?>
 
                                         <form method="POST" action="directions.php">
-                                        Enter Your Address:<input type="text" name="start_address">
+                                        Enter Your Address:<br><input type="text" name="start_address">
+
                                         <input type="hidden" name="end_address" value="<?php echo $address; ?>">
                                         <input type="Submit" class="btn btn-primary" value="Get Directions">
                                         </form>
