@@ -133,6 +133,7 @@
 
                                 while($row = $result->fetch_assoc()) {
                                     echo "<b>" . $row['wine_name'] . "</b>";
+                                    echo "<span style='display:inline-block; width: 5px;'></span>";
                                     echo "<button onclick='deleteFavorite(" . $row['wine_id'] . ")' class='btn btn-danger btn-xs' > <span class='glyphicon glyphicon-trash'></span></button><br>";
 
                                     echo "Price: " . $row['price'] . "<br>";
@@ -160,7 +161,8 @@
                                 $result = $db->query($sql);
 
                                 while($row = $result->fetch_assoc()) {
-                                    echo "<b>" . $row['winery_name'] . "</b><br>";
+                                    echo "<b>" . $row['winery_name'] . "</b>";
+                                    echo "<span style='display:inline-block; width: 5px;'></span>";
                                     echo "<button onclick='deleteReview(\"" . $row['email'] . "\",\"" . $row['timestamp'] . "\")' class='btn btn-danger btn-xs' > <span class='glyphicon glyphicon-trash'></span></button><br>";
                                     echo "Date Visited: " . $row['timestamp'] . "<br>";
                                     echo "Review: " . $row['description'] . "<br>";
