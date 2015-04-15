@@ -5,7 +5,16 @@ function filterWines(classification) {
 		data: {'class': classification},
 		success: function (data) {
 			$("#wine-data")[0].innerHTML = data;
-			$('input.rating').rating();
+		}
+	});
+}
+function filterWinesAdmin(classification) {
+	$.ajax({
+		type: "POST",
+		url: 'filter_wine_admin.php',
+		data: {'class': classification},
+		success: function (data) {
+			$("#wine-data")[0].innerHTML = data;
 		}
 	});
 }

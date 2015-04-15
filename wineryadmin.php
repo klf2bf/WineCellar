@@ -74,7 +74,7 @@
 
     <script type="text/javascript" src="js/winery.js"></script>
     <script>
-        filterWines("All");
+        filterWinesAdmin("All");
     </script>
     <div class="container main-container">
         <div class="panel panel-info">
