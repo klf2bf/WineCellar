@@ -41,10 +41,10 @@
                                 $stmt = $db->stmt_init();
                                 if($stmt->prepare("SELECT winery_name FROM Winery WHERE owner_email='$email'")) {
                                     $stmt->execute();
-                                    $stmt->bind_result($winery_name);
+                                    $stmt->bind_result($admin_winery_name);
 
                                     while($stmt->fetch()){
-                                        echo "<li><a href='wineryadmin.php'>Manage " . $winery_name . "</a></li>";
+                                        echo "<li><a href='wineryadmin.php'>Manage " . $admin_winery_name . "</a></li>";
                                     }
                                 }
                                 $db->close();
