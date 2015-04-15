@@ -177,8 +177,10 @@
                                             while($row = $result->fetch_assoc()) {
                                                 echo "<a  class='list-group-item' data-toggle='collapse' data-target='#event_" . $count . "'>" . $row["event_name"] . " - " .  $row["date"] . "</a>";
                                                 echo "<div id='event_" . $count . "' class='sublinks collapse'>
-                                                    <a class='list-group-item small tab'>" . date('h:i a', strtotime($row['start'])) . " - " . date('h:i a', strtotime($row['end'])) . "</br>
-                                                    " . $row['description'] . "</a></div>";
+                                                    <a class='list-group-item small tab'>" . date('h:i a', strtotime($row['start'])) . " - " . date('h:i a', strtotime($row['end'])) . "</br>";
+                                                echo $row['description'];
+                                                echo "<form action='php/delete_event.php' method='post'><input type='hidden' name='event_name' value='" . $row["event_name"] . "'/><input type='hidden' name='winery_name' value='" . $admin_winery_name . "'/><button class='btn btn-xs btn-danger' type='submit'>Delete Event <span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></form>";
+                                                echo "</a></div>";
                                                 $count++;
                                             }
                                         } else {

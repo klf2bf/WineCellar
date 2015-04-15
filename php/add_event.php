@@ -21,7 +21,7 @@
         $stmt->execute();
 
         
-        header('Location: http://' . $_SERVER['HTTP_HOST'] .'/wineryadmin.php?winery_name='. $winery . '#eventTab');
+        header('Location: http://' . $_SERVER['HTTP_HOST'] .'/wineryadmin.php#eventTab');
         
         exit;
     } else {
