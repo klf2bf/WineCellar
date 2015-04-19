@@ -67,7 +67,7 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    So and so's account
+                    <?php echo $_SESSION["first_name"]. " " . $_SESSION["last_name"] . "'s Account";?>
                 </h3>
             </div>
 
