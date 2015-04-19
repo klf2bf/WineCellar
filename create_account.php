@@ -9,6 +9,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     $confirm_password = $_POST['confirm_password'];
     if ($password == $confirm_password) {
         $email = $_POST['email'];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $account_error = "Invalid email format"; 
+        }
+        else {
         $first_name = $_POST['first_name'];
         $last_name = $_POST['last_name'];
         $dob = $_POST['dob'];
@@ -17,12 +21,24 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         $query = "INSERT INTO User (email,first_name,last_name,password,dob) Values('$email','$first_name','$last_name','$password_hash','$dob')";
 
         if ($db->query($query) === TRUE) {
-            $_SESSION['current_user'] = $email;
+            $_SESSION['first_name'] = $first_name;
+            $_SESSION['last_name'] = $last_name;
+            $_SESSION['is_superuser'] = FALSE;
+            $_SESSION['email'] = $email;
+            $_SESSION['loggedin'] = true;
             header("Location: wineries.php");
+            
         } else {
-            $account_error = $db->error;
+            if (strpos($db->error,"Duplicate entry") !== FALSE) {
+                $account_error = "Username already exists";
+            }
+            else {
+                $account_error = $db->error;
+            }
+            
         }
     }
+}
     else {
         $account_error = "Passwords must match";
     }
@@ -81,27 +97,27 @@ else
                     <form action="" method="POST">
                         <div class='form-group'>
                             <label for='email'>Email</label>
-                            <input type='email' class='form-control' name='email'>
+                            <input type='email' class='form-control' name='email' value="<?php echo isset($_POST['email']) ? $_POST['email'] : '' ?>" required>
                         </div>
                         <div class='form-group'>
                             <label for='password'>Password</label>
-                            <input type='password' class='form-control' name='password'>
+                            <input type='password' class='form-control' name='password' required>
                         </div>
                         <div class='form-group'>
                             <label for='confirm_password'>Confirm Password</label>
-                            <input type='password' class='form-control' name='confirm_password'>
+                            <input type='password' class='form-control' name='confirm_password' required>
                         </div>
                         <div class='form-group'>
                             <label for='first_name'>First Name</label>
-                            <input type='text' class='form-control' name='first_name'>
+                            <input type='text' class='form-control' name='first_name' value="<?php echo isset($_POST['first_name']) ? $_POST['first_name'] : '' ?>" required>
                         </div>
                         <div class='form-group'>
                             <label for='last_name'>Last Name</label>
-                            <input type='text' class='form-control' name='last_name'>
+                            <input type='text' class='form-control' name='last_name' value="<?php echo isset($_POST['last_name']) ? $_POST['last_name'] : '' ?>" required>
                         </div>
                         <div class='form-group'>
                             <label for='dob'>Date of Birth</label>
-                            <input type='date' class='form-control' name='dob'>
+                            <input type='date' class='form-control' name='dob' value="<?php echo isset($_POST['dob']) ? $_POST['dob'] : '' ?>">
                         </div>
                         <input class='btn btn-primary' type="Submit" value="Create Account"><br/>
                     </form>
