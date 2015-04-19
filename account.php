@@ -128,7 +128,7 @@
                             <div class="panel-body">
                                 <?php
                                 $email = $_SESSION['email'];
-                                $sql = "SELECT * FROM Favorites NATURAL JOIN Wine WHERE email='$email' GROUP BY email";
+                                $sql = "SELECT * FROM Favorites NATURAL JOIN Wine WHERE email='$email'";
                                 $result = $db->query($sql);
 
                                 while($row = $result->fetch_assoc()) {
