@@ -262,9 +262,10 @@
                                             $count = -1;
                                             while($row = $result->fetch_assoc()) {
                                                 if ($count < 0) {
+                                                    $address = $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"];
                                                     echo "Website: " . $row["website"] . "<br>";
                                                     echo "Owner: " . $row["owner"] . "<br>";
-                                                    echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
+                                                    echo "Address: " . $address . "<br><br>";
                                                     echo $row["day_of_week"] . ": " . date('h:i a', strtotime($row['open'])) . " - " . date('h:i a', strtotime($row['close'])) . "<br>";
                                                     $count = 1;
                                                 } else {
@@ -291,6 +292,13 @@
                                         }
                                         $db->close();
                                         ?>
+
+                                        <form method="POST" action="directions.php">
+                                        Enter Your Address:<br><input type="text" name="start_address">
+
+                                        <input type="hidden" name="end_address" value="<?php echo $address; ?>">
+                                        <input type="Submit" class="btn btn-primary" value="Get Directions">
+                                        </form>
                                     </div>
                                 </div>
                             </div>

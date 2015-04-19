@@ -51,11 +51,11 @@
                     $stmt = $db->stmt_init();
                     if($stmt->prepare("SELECT winery_name FROM Winery WHERE owner_email='$email'")) {
                         $stmt->execute();
-                        $stmt->bind_result($winery_name);
+                        $stmt->bind_result($admin_winery_name);
 
                         while($stmt->fetch()){
-                            echo "<li class='active'><a href='wineryadmin.php'>Manage " . $winery_name . "</a></li>";
-                            $_SESSION['admin_winery_name'] = $winery_name;
+                            echo "<li class='active'><a href='wineryadmin.php'>Manage " . $admin_winery_name . "</a></li>";
+                            $_SESSION['admin_winery_name'] = $admin_winery_name;
                         }
                     }
                     $db->close();
@@ -74,7 +74,7 @@
 
     <script type="text/javascript" src="js/winery.js"></script>
     <script>
-        filterWines("All");
+        filterWinesAdmin("All");
     </script>
     <div class="container main-container">
         <div class="panel panel-info">
@@ -82,7 +82,7 @@
                 <h3 class="panel-title">
                     <?php
                         include("php/config.php");
-                        echo $winery_name;
+                        echo $admin_winery_name;
                         //echo $_GET["winery_name"]
                         //$db->close();
                     ?> Admin
@@ -113,11 +113,11 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <?php
-                                            echo "<a href='add_wine.php?winery_name=$winery_name' class='btn pull-right btn-primary'>Add Wine</a>";
+                                            echo "<a href='add_wine.php?winery_name=$admin_winery_name' class='btn pull-right btn-primary'>Add Wine</a>";
                                             echo "<a href='php/export_wine_reviews.php' style='margin-right: 3px;' class='btn pull-right btn-primary'>Export Reviews</a>";
-                                            $_SESSION['winery_name'] = $winery_name;
+                                            $_SESSION['winery_name'] = $admin_winery_name;
 
-                                            echo "<input type=hidden id='winery_name' value='" . $winery_name . "'>";
+                                            echo "<input type=hidden id='winery_name' value='" . $admin_winery_name . "'>";
                                         ?>
                                         <h3 class="panel-title">Wines</h3>
                                     </div>
@@ -130,10 +130,9 @@
                                             <ul class="dropdown-menu" style="width: 99.8%;" role="menu" aria-labelledby="classification">
                                                 <?php
                                                     include("php/config.php");
-                                                    $winery_name = $winery_name;
-                                                    $_SESSION['winery_name'] = $winery_name;
+                                                    $_SESSION['winery_name'] = $admin_winery_name;
                                                     $stmt = $db->stmt_init();
-                                                    $sql = "SELECT classification FROM Wine WHERE winery_name='$winery_name' GROUP BY classification";
+                                                    $sql = "SELECT classification FROM Wine WHERE winery_name='$admin_winery_name' GROUP BY classification";
                                                     if ($stmt->prepare($sql)) {
                                                         $stmt->execute();
                                                         $stmt->store_result();
@@ -160,7 +159,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <?php
-                                            echo "<a href='add_event.php?winery_name=$winery_name' class='btn pull-right btn-primary'>Add Event</a>"
+                                            echo "<a href='add_event.php?winery_name=$admin_winery_name' class='btn pull-right btn-primary'>Add Event</a>"
                                         ?>
                                         <h3 class="panel-title">Events</h3>
                                     </div>
@@ -169,7 +168,7 @@
                                     <div class="panel list-group">
                                         <?php
                                         include("php/config.php");
-                                        $sql = "SELECT * FROM Event WHERE winery_name=\"$winery_name\" ORDER BY date DESC";
+                                        $sql = "SELECT * FROM Event WHERE winery_name=\"$admin_winery_name\" ORDER BY date DESC";
                                         $result = $db->query($sql);
                                         
                                         if ($result->num_rows > 0) {
@@ -178,8 +177,10 @@
                                             while($row = $result->fetch_assoc()) {
                                                 echo "<a  class='list-group-item' data-toggle='collapse' data-target='#event_" . $count . "'>" . $row["event_name"] . " - " .  $row["date"] . "</a>";
                                                 echo "<div id='event_" . $count . "' class='sublinks collapse'>
-                                                    <a class='list-group-item small tab'>" . date('h:i a', strtotime($row['start'])) . " - " . date('h:i a', strtotime($row['end'])) . "</br>
-                                                    " . $row['description'] . "</a></div>";
+                                                    <a class='list-group-item small tab'>" . date('h:i a', strtotime($row['start'])) . " - " . date('h:i a', strtotime($row['end'])) . "</br>";
+                                                echo $row['description'];
+                                                echo "<form action='php/delete_event.php' method='post'><input type='hidden' name='event_name' value='" . $row["event_name"] . "'/><input type='hidden' name='winery_name' value='" . $admin_winery_name . "'/><button class='btn btn-xs btn-danger' type='submit'>Delete Event <span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></form>";
+                                                echo "</a></div>";
                                                 $count++;
                                             }
                                         } else {
@@ -206,7 +207,7 @@
                                         <?php
                                         include("php/config.php");
                                         $stmt_2 = $db->stmt_init();
-                                        $sql_2 = "SELECT first_name, stars, description, timestamp FROM Reviews NATURAL JOIN User WHERE winery_name='$winery_name'";
+                                        $sql_2 = "SELECT first_name, stars, description, timestamp FROM Reviews NATURAL JOIN User WHERE winery_name='$admin_winery_name'";
                                         if($stmt_2->prepare($sql_2)) {
                                             $stmt_2->execute();
                                             $stmt_2->store_result();
@@ -254,7 +255,7 @@
                                     <div class="panel-body">
                                         <?php
                                             include("php/config.php");
-                                            $sql = "SELECT * FROM Winery NATURAL JOIN Winery_Hours WHERE winery_name=\"$winery_name\"";
+                                            $sql = "SELECT * FROM Winery NATURAL JOIN Winery_Hours WHERE winery_name=\"$admin_winery_name\"";
                                             $result = $db->query($sql);
 
                                             if ($result->num_rows > 0) {
@@ -266,7 +267,7 @@
                                                         echo "Owner: " . $row["owner"] . "<br>";
                                                         echo "Address: " . $row["street"] . ", " . $row["city"] . ", " . $row["state"] . "  " . $row["zipcode"] . "<br><br>";
                                                         echo "<form action='php/update_winery_hours.php' class='form-inline' method='post'>";
-                                                        echo "<input type='hidden' name='winery' value='$winery_name'>";
+                                                        echo "<input type='hidden' name='winery' value='$admin_winery_name'>";
                                                         echo "<input type='hidden' name='day' value='" . $row["day_of_week"] . "'>";
                                                         echo $row["day_of_week"] . ": " . "<input type='time' class='form-control' name='open' value='" . $row["open"] . "'> to <input type='time' class='form-control' name='close' value='" . $row["close"] . "'>";
                                                         echo " <button type='submit' class='btn btn-default'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
@@ -275,7 +276,7 @@
                                                         $count = 1;
                                                     } else {
                                                         echo "<form action='php/update_winery_hours.php' class='form-inline' method='post'>";
-                                                        echo "<input type='hidden' name='winery' value='$winery_name'>";
+                                                        echo "<input type='hidden' name='winery' value='$admin_winery_name'>";
                                                         echo "<input type='hidden' name='day' value='" . $row["day_of_week"] . "'>";
                                                         echo $row["day_of_week"] . ": " . "<input type='time' class='form-control' name='open' value='" . $row["open"] . "'> to <input type='time' class='form-control' name='close' value='" . $row["close"] . "'>";
                                                         echo " <button type='submit' class='btn btn-default'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
@@ -293,7 +294,7 @@
                                         <form class='form-inline' action='php/add_winery_hours.php' method='post'>
                                             <input type='hidden' name='winery' value='<?php
                                                 //include("php/config.php");
-                                                echo $winery_name;
+                                                echo $admin_winery_name;
                                             ?>'>
                                             <div class='form-group'>
                                                 Day: 
