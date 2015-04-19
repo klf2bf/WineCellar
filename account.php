@@ -11,6 +11,16 @@
     rel="stylesheet">
     <link href="css/style.css"rel="stylesheet">
     <link href="css/base_subpanels.css" rel="stylesheet">
+
+    <script type="text/javascript">
+        function deleteFavorite(wine_id) {
+            $.post("php/delete_favorite.php", { "wine_id" : wine_id}, function() { location.reload();});
+        }
+        function deleteReview(email,time_stamp) {
+            $.post("php/delete_review.php", {"email" : email, "time_stamp" : time_stamp}, function() { location.reload();});
+        }
+    </script>
+    
 </head>
 <body>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
