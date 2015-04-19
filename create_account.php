@@ -21,7 +21,11 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
         $query = "INSERT INTO User (email,first_name,last_name,password,dob) Values('$email','$first_name','$last_name','$password_hash','$dob')";
 
         if ($db->query($query) === TRUE) {
-            $_SESSION['current_user'] = $email;
+            $_SESSION['first_name'] = $first_name;
+            $_SESSION['last_name'] = $last_name;
+            $_SESSION['is_superuser'] = FALSE;
+            $_SESSION['email'] = $email;
+            $_SESSION['loggedin'] = true;
             header("Location: wineries.php");
             
         } else {
