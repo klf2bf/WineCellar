@@ -22,9 +22,16 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
 
         if ($db->query($query) === TRUE) {
             $_SESSION['current_user'] = $email;
+            header("Location: wineries.php");
             
         } else {
-            $account_error = $db->error;
+            if (strpos($db->error,"Duplicate entry") !== FALSE) {
+                $account_error = "Username already exists";
+            }
+            else {
+                $account_error = $db->error;
+            }
+            
         }
     }
 }
