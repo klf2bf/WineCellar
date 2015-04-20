@@ -24,7 +24,7 @@
                 echo("error: " . htmlspecialchars($stmt_3->error));
             }
         }
-        header('Location: http://' . $_SERVER['HTTP_HOST'] . '/wineryadmin.php#wineTab');
+        header("Location: ../wineryadmin.php#wineTab");
         exit;
 
     } else {
