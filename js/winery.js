@@ -28,7 +28,7 @@ $(document).ready(function () {
 	$("#add_winery_review").click(function(){
 		var winery_name = $("#winery_name").val();
 
-		window.location = "../add_winery_review.php?winery_name=" + winery_name;
+		window.location = "../WineCellar/add_winery_review.php?winery_name=" + winery_name;
 
 	});
 
@@ -54,7 +54,7 @@ $(document).ready(function () {
 
 	$("#add_wine_review").click(function(){
 		var winery_name = $("#winery_name").val();
-		window.location = "../add_wine_review.php?winery_name=" + winery_name;
+		window.location = "../WineCellar/add_wine_review.php?winery_name=" + winery_name;
 	});
 
 	$("#submit").click(function(event) {
