@@ -294,8 +294,11 @@
                                         ?>
 
                                         <form method="POST" action="directions.php">
-                                        Enter Your Address:<br><input type="text" name="start_address">
-
+                                        
+                                        <div class='form-group'>
+                                            <label for='start_address'>Enter Your Address:</label>
+                                            <input type='text' class='form-control' name='start_address'>
+                                        </div>
                                         <input type="hidden" name="end_address" value="<?php echo $address; ?>">
                                         <input type="Submit" class="btn btn-primary" value="Get Directions">
                                         </form>
