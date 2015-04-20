@@ -160,12 +160,13 @@
                                         $email = $_SESSION['email'];
                                         $sql = "SELECT * FROM Reviews WHERE email='$email'";
                                         $result = $db->query($sql);
-
+                                        
                                         while($row = $result->fetch_assoc()) {
+                                            $timeStamp = strtotime($row['timestamp']);
                                             echo "<b>" . $row['winery_name'] . "</b>";
                                             echo "<span style='display:inline-block; width: 5px;'></span>";
                                             echo "<button onclick='deleteReview(\"" . $row['email'] . "\",\"" . $row['timestamp'] . "\")' class='btn btn-danger btn-xs' > <span class='glyphicon glyphicon-trash'></span></button><br>";
-                                            echo "Date Visited: " . date('d-m-Y h:i a', $row['timestamp']) . "<br>";
+                                            echo "Date Visited: " . date('d-m-Y h:i a', $timeStamp) . "<br>";
                                             echo "Review: " . $row['description'] . "<br>";
                                             echo "<br>";
                                         }
