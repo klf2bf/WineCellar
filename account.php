@@ -20,7 +20,7 @@
             $.post("php/delete_review.php", {"email" : email, "time_stamp" : time_stamp}, function() { location.reload();});
         }
     </script>
-    
+
 </head>
 <body>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -165,7 +165,7 @@
                                             echo "<b>" . $row['winery_name'] . "</b>";
                                             echo "<span style='display:inline-block; width: 5px;'></span>";
                                             echo "<button onclick='deleteReview(\"" . $row['email'] . "\",\"" . $row['timestamp'] . "\")' class='btn btn-danger btn-xs' > <span class='glyphicon glyphicon-trash'></span></button><br>";
-                                            echo "Date Visited: " . $row['timestamp'] . "<br>";
+                                            echo "Date Visited: " . date('d-m-Y h:i a', $row['timestamp']) . "<br>";
                                             echo "Review: " . $row['description'] . "<br>";
                                             echo "<br>";
                                         }
