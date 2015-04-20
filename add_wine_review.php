@@ -110,8 +110,6 @@
                 </div>
             		
             		<a type="submit" id="submitWineReview" class="btn pull-left btn-primary" style="margin-right: 3px;">Submit</a>
-                <a type="cancel" id="cancel" class="btn pull-left btn-default">Cancel</a>
-
             	</form>
             </div>
         </div>

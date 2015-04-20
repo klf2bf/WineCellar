@@ -88,8 +88,6 @@
 
             		<a type="submit" id="submit" class="btn pull-left btn-primary" style="margin-right: 3px;">Submit</a>
                 <p> </p>
-                <a type="cancel" id="cancel" class="btn pull-left btn-default">Cancel</a>
-
             	</form>
               <div id="message"> </div>
             </div>
