@@ -3,6 +3,6 @@
 	session_start();
 	session_unset();
 	$result = session_destroy();
-	header("Location: /wineries.php");
+	header("Location: ../wineries.php");
 	
 ?>

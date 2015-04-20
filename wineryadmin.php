@@ -4,7 +4,7 @@
         printf("Failed to connect to MySQL: " . mysqli_connect_error()) ;
     }
     if($_SESSION['is_superuser']!=true){
-        header("Location: /403-error.php");
+        header("Location: 403-error.php");
         die();
     }
 
