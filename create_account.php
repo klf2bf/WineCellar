@@ -121,6 +121,8 @@ else
                         </div>
                         <input class='btn btn-primary' type="Submit" value="Create Account"><br/>
                     </form>
+                    Note: Your first name will be used throughout the site and your email will be sent to the wineries.
+                    <br>
                     <?php echo $account_error ?>
                 </div>
             </div>
