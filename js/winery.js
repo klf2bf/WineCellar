@@ -71,7 +71,7 @@ $(document).ready(function () {
 				if (data) {
 					alert(data)
 				} else {
-					window.location = "../winery.php?winery_name=" + wineryname + "#reviewTab";
+					window.location = "../WineCellar/winery.php?winery_name=" + wineryname + "#reviewTab";
 				} 
 			}
 		});
@@ -94,7 +94,7 @@ $(document).ready(function () {
 					alert(data);
 				} else {
 					$('#submit_wine_review')[0].reset();
-					window.location = "../winery.php?winery_name=" + winery_name;
+					window.location = "../WineCellar/winery.php?winery_name=" + winery_name;
 				}
 			}
 		});
@@ -103,7 +103,7 @@ $(document).ready(function () {
 
 	$("#cancel").click(function(event) {
 		var wineryname = $("#winery_name").val();
-		window.location = "../winery.php?winery_name=" + wineryname;
+		window.location = "../WineCellar/winery.php?winery_name=" + wineryname;
 	})
 
 	$('.nav-pills').stickyTabs();
